@@ -15,4 +15,3 @@ def load_csv(path, delimiter=","):
                 if key.strip() != key:
                     row[key.strip()] = row.pop(key)
         return rows
-        return list(reader)

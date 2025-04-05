@@ -11,7 +11,9 @@ def clean_value(value):
     return value
 
 def normalize_decimal(value):
-    return value.replace("R$", "").replace(" ", "").replace(",", ".")
+    if value is None:
+        return ""
+    return value.replace("R$", "").replace(" ", "").replace(".", "").replace(",", ".")
 
 def validate_value_type(value, expected_type, date_format=None, timestamp_format=None):
     value = clean_value(value)
@@ -116,6 +118,11 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
                 try:
                     normalized = normalize_decimal(value)
                     corrected_row[source_col] = str(float(normalized)) if normalized else ""
+                except:
+                    corrected_row[source_col] = ""
+            elif expected_type == "integer":
+                try:
+                    corrected_row[source_col] = str(int(value.replace(" ", ""))) if value else ""
                 except:
                     corrected_row[source_col] = ""
             else:
