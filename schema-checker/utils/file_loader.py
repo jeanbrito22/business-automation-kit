@@ -8,5 +8,11 @@ def load_schema(path):
 def load_csv(path, delimiter=","):
     with open(path, newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f, delimiter=delimiter)
+        rows = list(reader)
         reader.fieldnames = [h.strip() for h in reader.fieldnames]
+        for row in rows:
+            for key in list(row.keys()):
+                if key.strip() != key:
+                    row[key.strip()] = row.pop(key)
+        return rows
         return list(reader)

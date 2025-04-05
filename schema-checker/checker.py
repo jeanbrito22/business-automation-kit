@@ -114,7 +114,8 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
 
             if expected_type == "decimal":
                 try:
-                    corrected_row[source_col] = str(float(normalize_decimal(value)))
+                    normalized = normalize_decimal(value)
+                    corrected_row[source_col] = str(float(normalized)) if normalized else ""
                 except:
                     corrected_row[source_col] = ""
             else:
