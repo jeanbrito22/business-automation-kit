@@ -1,0 +1,360 @@
+{
+    "table_spec": [
+        {
+            "error": {
+                "spark_write_args": {
+                    "format": "parquet",
+                    "mode": "append",
+                    "path": "s3://bucket/path/to/file.parquet"
+                }
+
+            },
+            "input": {
+                "enable_schema_validation": true,
+                "spark_read_args":{
+                    "encoding": "UTF-8",
+                    "header": true,
+                    "sep": ";",
+                    "timestampFormat": "dd/MM/yyyy HH:mm:ss",
+                    "dateFormat": "dd/MM/yyyy"
+                }
+            },
+            "output": {
+                "database": "db_name",
+                "format": "parquet",
+                "mode": "append",
+                "path": "s3://bucket/path/to/file.parquet",
+                "table": "table_name",
+                "anonymize_columns": {
+                    "column1": "column1"
+                }
+            },
+            "schema": [
+                {
+                    "comment": "Campo 'Implantação'",
+                    "order": "1",
+                    "rename_column": "implantação",
+                    "source_column": "Implantação",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Nota Fiscal'",
+                    "order": "2",
+                    "rename_column": "nota_fiscal",
+                    "source_column": "Nota Fiscal",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Placa'",
+                    "order": "3",
+                    "rename_column": "placa",
+                    "source_column": "Placa",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Chassi'",
+                    "order": "4",
+                    "rename_column": "chassi",
+                    "source_column": "Chassi",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'N° Pedido'",
+                    "order": "5",
+                    "rename_column": "numero_pedido",
+                    "source_column": "N° Pedido",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Master'",
+                    "order": "6",
+                    "rename_column": "master",
+                    "source_column": "Master",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Data Pedido'",
+                    "order": "7",
+                    "rename_column": "data_pedido",
+                    "source_column": "Data Pedido",
+                    "type": "date"
+                },
+                {
+                    "comment": "Campo 'Cliente'",
+                    "order": "8",
+                    "rename_column": "cliente",
+                    "source_column": "Cliente",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Modelo'",
+                    "order": "9",
+                    "rename_column": "modelo",
+                    "source_column": "Modelo",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Acessórios'",
+                    "order": "10",
+                    "rename_column": "acessorios",
+                    "source_column": "Acessórios",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Montadora'",
+                    "order": "11",
+                    "rename_column": "montadora",
+                    "source_column": "Montadora",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Cor'",
+                    "order": "12",
+                    "rename_column": "cor",
+                    "source_column": "Cor",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Tipo Alienação'",
+                    "order": "13",
+                    "rename_column": "tipo_alienacao",
+                    "source_column": "Tipo Alienação",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Faturamento'",
+                    "order": "14",
+                    "rename_column": "faturamento",
+                    "source_column": "Faturamento",
+                    "type": "date"
+                },
+                {
+                    "comment": "Campo 'Prev. Fat'",
+                    "order": "15",
+                    "rename_column": "previsao_faturamento",
+                    "source_column": "Prev. Fat",
+                    "type": "date"
+                },
+                {
+                    "comment": "Campo 'Data Fat'",
+                    "order": "16",
+                    "rename_column": "data_faturamento",
+                    "source_column": "Data Fat",
+                    "type": "date"
+                },
+                {
+                    "comment": "Campo 'Mês_Fat'",
+                    "order": "17",
+                    "rename_column": "mes_faturamento",
+                    "source_column": "Mês_Fat",
+                    "type": "string"
+                },
+                {
+                    "comment":"Campo 'Status Veículo'",
+                    "order": "18",
+                    "rename_column": "status_veiculo",
+                    "source_column": "Status Veículo",
+                    "type": "string"
+                },
+                {
+                    "comment":"Campo 'Motivo Compra'",
+                    "order": "19",
+                    "rename_column": "motivo_compra",
+                    "source_column": "Motivo Compra",
+                    "type": "string"
+                },
+                {
+                    "comment":"Campo 'Banco'",
+                    "order": "20",
+                    "rename_column": "banco",
+                    "source_column": "Banco",
+                    "type": "string"
+                },
+                {
+                    "comment":"Campo 'Data Vencimento'",
+                    "order": "21",
+                    "rename_column": "data_vencimento",
+                    "source_column": "Data Vencimento",
+                    "type": "date"
+                },
+                {
+                    "comment":"Campo 'Mês_Venc'",
+                    "order": "22",
+                    "rename_column": "mes_vencimento",
+                    "source_column": "Mês_Venc",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Quantidade'",
+                    "order": "23",
+                    "rename_column": "quantidade",
+                    "source_column": "Quantidade",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Valor Unitario'",
+                    "order": "24",
+                    "rename_column": "valor_unitario",
+                    "source_column": "Valor Unitario",
+                    "type": "decimal"
+                },
+                {
+                    "comment": "Campo 'Valor Total'",
+                    "order": "25",
+                    "rename_column": "valor_total",
+                    "source_column": "Valor Total",
+                    "type": "decimal"
+                },
+                {
+                    "comment": "Campo 'Previsão de Implantação'",
+                    "order": "26",
+                    "rename_column": "previsao_implantacao",
+                    "source_column": "Previsão de Implantação",
+                    "type": "date"
+                },
+                {
+                    "comment": "Campo 'Mês'",
+                    "order": "27",
+                    "rename_column": "mes",
+                    "source_column": "Mês",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Dt Implantação'",
+                    "order": "28",
+                    "rename_column": "data_implantacao",
+                    "source_column": "Dt Implantação",
+                    "type": "date"
+                },
+                {
+                    "comment": "Campo 'Mês_Imp'",
+                    "order": "29",
+                    "rename_column": "mes_implantacao",
+                    "source_column": "Mês_Imp",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Tarifa Locação'",
+                    "order": "30",
+                    "rename_column": "tarifa_locacao",
+                    "source_column": "Tarifa Locação",
+                    "type": "decimal"
+                },
+                {
+                    "comment": "Campo 'Prazo Contrato'",
+                    "order": "31",
+                    "rename_column": "prazo_contrato",
+                    "source_column": "Prazo Contrato",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Observação'",
+                    "order": "32",
+                    "rename_column": "observacao",
+                    "source_column": "Observação",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'MVA'",
+                    "order": "33",
+                    "rename_column": "mva",
+                    "source_column": "MVA",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Placa de Substituição'",
+                    "order": "34",
+                    "rename_column": "placa_substituicao",
+                    "source_column": "Placa de Substituição",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Codigo Empresa'",
+                    "order": "35",
+                    "rename_column": "codigo_empresa",
+                    "source_column": "Codigo Empresa",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Tipo Negocio'",
+                    "order": "36",
+                    "rename_column": "tipo_negocio",
+                    "source_column": "Tipo Negocio",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Produto'",
+                    "order": "37",
+                    "rename_column": "produto",
+                    "source_column": "Produto",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Situação Secundária'",
+                    "order": "38",
+                    "rename_column": "situacao_secundaria",
+                    "source_column": "Situação Secundária",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Aprovado em'",
+                    "order": "39",
+                    "rename_column": "aprovado_em",
+                    "source_column": "Aprovado em",
+                    "type": "date"
+                },
+                {
+                    "comment": "Campo 'Semana'",
+                    "order": "40",
+                    "rename_column": "semana",
+                    "source_column": "Semana",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Ano'",
+                    "order": "41",
+                    "rename_column": "ano",
+                    "source_column": "Ano",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Anfavea'",
+                    "order": "42",
+                    "rename_column": "anfavea",
+                    "source_column": "Anfavea",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Manutenção'",
+                    "order": "43",
+                    "rename_column": "manutencao",
+                    "source_column": "Manutenção",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Master 2° Locação'",
+                    "order": "44",
+                    "rename_column": "master_segunda_locacao",
+                    "source_column": "Master 2° Locação",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Condicionantes'",
+                    "order": "45",
+                    "rename_column": "condicionantes",
+                    "source_column": "Condicionantes",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Grupo Econômico'",
+                    "order": "46",
+                    "rename_column": "grupo_economico",
+                    "source_column": "Grupo Econômico",
+                    "type": "string"
+                }
+                
+            ]
+        }
+    ],
+    "type": "csv"
+}
