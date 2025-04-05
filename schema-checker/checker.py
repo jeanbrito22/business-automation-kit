@@ -1,5 +1,4 @@
 import csv
-import json
 from utils.file_loader import load_csv, load_schema
 from datetime import datetime
 
@@ -50,7 +49,19 @@ def validate_csv_against_schema(schema_path, csv_path):
 
     csv_data = load_csv(csv_path, delimiter=delimiter)
 
+    expected_columns = [col["source_column"] for col in schema]
+    csv_columns = csv_data[0].keys()
+
     errors = []
+
+    # Verifica colunas extras
+    for col in csv_columns:
+        if col not in expected_columns:
+            errors.append(f"Header error: Unexpected column '{col}' not in schema")
+
+    # Verifica ordem
+    if list(csv_columns) != expected_columns:
+        errors.append("Header error: Column order does not match schema")
 
     for i, row in enumerate(csv_data):
         for column in schema:
@@ -80,24 +91,28 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
     date_format = input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y")
 
     csv_data = load_csv(input_csv_path, delimiter=delimiter)
+    expected_columns = [col["source_column"] for col in schema]
 
+    corrected_data = []
     for row in csv_data:
+        corrected_row = {}
         for column in schema:
             source_col = column["source_column"]
             expected_type = column["type"]
-            value = row.get(source_col, "")
-            value = clean_value(value)
+            value = clean_value(row.get(source_col, ""))
 
             if expected_type == "decimal":
                 try:
-                    row[source_col] = str(float(normalize_decimal(value)))
+                    corrected_row[source_col] = str(float(normalize_decimal(value)))
                 except:
-                    row[source_col] = ""
+                    corrected_row[source_col] = ""
             else:
-                row[source_col] = value
+                corrected_row[source_col] = value
+
+        corrected_data.append(corrected_row)
 
     with open(output_csv_path, "w", newline='', encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=csv_data[0].keys(), delimiter=delimiter)
+        writer = csv.DictWriter(f, fieldnames=expected_columns, delimiter=delimiter)
         writer.writeheader()
-        writer.writerows(csv_data)
+        writer.writerows(corrected_data)
     print(f"\n💾 Corrected CSV saved to: {output_csv_path}")
