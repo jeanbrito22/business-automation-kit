@@ -70,9 +70,7 @@ def validate_csv_against_schema(schema_path, csv_path):
             value = row.get(source_col)
             value = clean_value(value)
 
-            if value == "":
-                errors.append(f"Row {i+1}: Missing value for '{source_col}'")
-            elif not validate_value_type(value, expected_type, date_format):
+            if value and not validate_value_type(value, expected_type, date_format):
                 errors.append(f"Row {i+1}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
 
     if errors:
