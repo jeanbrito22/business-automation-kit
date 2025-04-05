@@ -13,7 +13,7 @@ def clean_value(value):
 def normalize_decimal(value):
     return value.replace("R$", "").replace(" ", "").replace(",", ".")
 
-def validate_value_type(value, expected_type, date_format=None):
+def validate_value_type(value, expected_type, date_format=None, timestamp_format=None):
     value = clean_value(value)
 
     if expected_type == "integer":
@@ -33,6 +33,12 @@ def validate_value_type(value, expected_type, date_format=None):
     elif expected_type == "date":
         try:
             datetime.strptime(value, date_format or "%d/%m/%Y")
+            return True
+        except:
+            return False
+    elif expected_type == "timestamp":
+        try:
+            datetime.strptime(value, timestamp_format or "%d/%m/%Y %H:%M:%S")
             return True
         except:
             return False
@@ -70,7 +76,12 @@ def validate_csv_against_schema(schema_path, csv_path):
             value = row.get(source_col)
             value = clean_value(value)
 
-            if value and not validate_value_type(value, expected_type, date_format if expected_type == "date" else None):
+            if value and not validate_value_type(
+                value,
+                expected_type,
+                date_format if expected_type == "date" else None,
+                input_settings["spark_read_args"].get("timestampFormat") if expected_type == "timestamp" else None
+            ):
                 errors.append(f"Row {i+1}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
 
     if errors:
