@@ -2,10 +2,11 @@ import json
 import csv
 
 def load_schema(path):
-    with open(path, "r") as f:
+    with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 def load_csv(path, delimiter=","):
     with open(path, newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f, delimiter=delimiter)
+        reader.fieldnames = [h.strip() for h in reader.fieldnames]
         return list(reader)

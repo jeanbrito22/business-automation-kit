@@ -17,6 +17,8 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
     value = clean_value(value)
 
     if expected_type == "integer":
+        if any(c in value for c in ["R$", ",", "."]):
+            return False
         try:
             int(value)
             return True
@@ -76,7 +78,7 @@ def validate_csv_against_schema(schema_path, csv_path):
             value = row.get(source_col)
             value = clean_value(value)
 
-            if value and not validate_value_type(
+            if value.strip() != "" and not validate_value_type(
                 value,
                 expected_type,
                 date_format if expected_type == "date" else None,
