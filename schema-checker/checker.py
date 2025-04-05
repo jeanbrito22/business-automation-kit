@@ -70,7 +70,7 @@ def validate_csv_against_schema(schema_path, csv_path):
             value = row.get(source_col)
             value = clean_value(value)
 
-            if value and not validate_value_type(value, expected_type, date_format):
+            if value and not validate_value_type(value, expected_type, date_format if expected_type == "date" else None):
                 errors.append(f"Row {i+1}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
 
     if errors:
@@ -110,7 +110,7 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
         corrected_data.append(corrected_row)
 
     with open(output_csv_path, "w", newline='', encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=expected_columns, delimiter=delimiter)
+        writer = csv.DictWriter(f, fieldnames=expected_columns, delimiter=';')
         writer.writeheader()
         writer.writerows(corrected_data)
     print(f"\n💾 Corrected CSV saved to: {output_csv_path}")
