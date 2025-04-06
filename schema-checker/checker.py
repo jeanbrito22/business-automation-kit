@@ -91,7 +91,7 @@ def validate_csv_against_schema(schema_path, csv_path):
 
     if errors:
         with open("data/validation_report.log", "w", encoding="utf-8") as log:
-        # Gera relatório de diferenças entre o cabeçalho do CSV e o schema
+            # Gera relatório de diferenças entre o cabeçalho do CSV e o schema
             log.write("📝 CSV/Schema Header Mismatch Report:")
             csv_cols_set = set(csv_columns)
             schema_cols_set = set(expected_columns)
@@ -109,7 +109,7 @@ def validate_csv_against_schema(schema_path, csv_path):
                 log.write(f" - {err}")
     else:
         with open("data/validation_report.log", "w", encoding="utf-8") as log:
-            log.write(" ✅ CSV is valid against schema")
+            log.write("✅ CSV is valid against schema")
 
 def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
     schema_data = load_schema(schema_path)
@@ -144,7 +144,7 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
             elif expected_type == "date":
                 try:
                     datetime.strptime(value, date_format)
-                    corrected_row[source_col] = value
+                    corrected_row[source_col] = clean_value(value)
                 except:
                     corrected_row[source_col] = ""
             else:
