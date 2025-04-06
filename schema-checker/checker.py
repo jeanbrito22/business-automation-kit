@@ -90,25 +90,26 @@ def validate_csv_against_schema(schema_path, csv_path):
                 errors.append(f"Row {i+1}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
 
     if errors:
-        print("🚨 Validation errors found:")
+        with open("data/validation_report.log", "w", encoding="utf-8") as log:
         # Gera relatório de diferenças entre o cabeçalho do CSV e o schema
-        print("📝 CSV/Schema Header Mismatch Report:")
-        csv_cols_set = set(csv_columns)
-        schema_cols_set = set(expected_columns)
-        missing_in_csv = schema_cols_set - csv_cols_set
-        unexpected_in_csv = csv_cols_set - schema_cols_set
-        if missing_in_csv:
-            print(" - Columns expected in schema but missing in CSV:")
-            for col in sorted(missing_in_csv):
-                print(f"    · {col}")
-        if unexpected_in_csv:
-            print(" - Columns found in CSV but not in schema:")
-            for col in sorted(unexpected_in_csv):
-                print(f"    · {col}")
-        for err in errors:
-            print(" -", err)
+            log.write("📝 CSV/Schema Header Mismatch Report:")
+            csv_cols_set = set(csv_columns)
+            schema_cols_set = set(expected_columns)
+            missing_in_csv = schema_cols_set - csv_cols_set
+            unexpected_in_csv = csv_cols_set - schema_cols_set
+            if missing_in_csv:
+                log.write(" - Columns expected in schema but missing in CSV:")
+                for col in sorted(missing_in_csv):
+                    log.write(f"    · {col}")
+            if unexpected_in_csv:
+                log.write(" - Columns found in CSV but not in schema:")
+                for col in sorted(unexpected_in_csv):
+                    print(f"    · {col}")
+            for err in errors:
+                log.write(f" - {err}")
     else:
-        print("\n✅ CSV is valid against schema")
+        with open("data/validation_report.log", "w", encoding="utf-8") as log:
+            log.write(" ✅ CSV is valid against schema")
 
 def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
     schema_data = load_schema(schema_path)
