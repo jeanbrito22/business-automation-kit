@@ -142,10 +142,9 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
                 except:
                     corrected_row[source_col] = ""
             elif expected_type == "date":
-                try:
-                    datetime.strptime(value, date_format)
-                    corrected_row[source_col] = clean_value(value)
-                except:
+                if validate_value_type(value, "date", date_format):
+                    corrected_row[source_col] = value
+                else:
                     corrected_row[source_col] = ""
             else:
                 corrected_row[source_col] = value
