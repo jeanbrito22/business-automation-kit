@@ -12,6 +12,6 @@ def load_csv(path, delimiter=","):
         reader.fieldnames = [" ".join(h.strip().split()) for h in reader.fieldnames]
         for row in rows:
             for key in list(row.keys()):
-                if key.strip() != key:
-                    row[key.strip()] = row.pop(key)
+                if key.strip() != key or "  " in key:
+                    row[" ".join(key.strip().split())] = row.pop(key)
         return rows
