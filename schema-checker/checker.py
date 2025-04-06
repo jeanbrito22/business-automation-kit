@@ -90,7 +90,21 @@ def validate_csv_against_schema(schema_path, csv_path):
                 errors.append(f"Row {i+1}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
 
     if errors:
-        print("\n🚨 Validation errors found:")
+        print("🚨 Validation errors found:")
+        # Gera relatório de diferenças entre o cabeçalho do CSV e o schema
+        print("📝 CSV/Schema Header Mismatch Report:")
+        csv_cols_set = set(csv_columns)
+        schema_cols_set = set(expected_columns)
+        missing_in_csv = schema_cols_set - csv_cols_set
+        unexpected_in_csv = csv_cols_set - schema_cols_set
+        if missing_in_csv:
+            print(" - Columns expected in schema but missing in CSV:")
+            for col in sorted(missing_in_csv):
+                print(f"    · {col}")
+        if unexpected_in_csv:
+            print(" - Columns found in CSV but not in schema:")
+            for col in sorted(unexpected_in_csv):
+                print(f"    · {col}")
         for err in errors:
             print(" -", err)
     else:
