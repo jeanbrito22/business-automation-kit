@@ -6,6 +6,7 @@ def clean_value(value):
     if value is None:
         return ""
     value = value.strip()
+    value = " ".join(value.split())  # remove múltiplos espaços consecutivos
     if value == "-":
         return ""
     return value
@@ -123,6 +124,12 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
             elif expected_type == "integer":
                 try:
                     corrected_row[source_col] = str(int(value.replace(" ", ""))) if value else ""
+                except:
+                    corrected_row[source_col] = ""
+            elif expected_type == "date":
+                try:
+                    datetime.strptime(value, date_format)
+                    corrected_row[source_col] = value
                 except:
                     corrected_row[source_col] = ""
             else:
