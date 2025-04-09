@@ -16,9 +16,14 @@ def normalize_decimal(value):
     if value is None:
         return ""
     value = clean_value(value)
-    value = value.replace("R$", "").replace(" ", "").replace(".", "").replace(",", ".")
+    value = value.replace("R$", "").replace(" ", "")
 
-    # Garante que o valor final tenha formato válido de número decimal
+    if "," in value:
+        # Caso esteja no formato brasileiro: 1.296,60 → 1296.60
+        value = value.replace(".", "").replace(",", ".")
+    # Caso contrário, preserva o ponto (padrão americano): 128.4 → 128.4
+
+    # Valida se o valor final está no formato decimal correto
     if re.fullmatch(r"-?\d+(\.\d+)?", value):
         return value
     return ""
