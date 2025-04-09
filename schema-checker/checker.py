@@ -1,3 +1,4 @@
+import re
 import csv
 from utils.file_loader import load_csv, load_schema
 from datetime import datetime
@@ -14,7 +15,13 @@ def clean_value(value):
 def normalize_decimal(value):
     if value is None:
         return ""
-    return value.replace("R$", "").replace(" ", "").replace(".", "").replace(",", ".")
+    value = clean_value(value)
+    value = value.replace("R$", "").replace(" ", "").replace(".", "").replace(",", ".")
+
+    # Garante que o valor final tenha formato válido de número decimal
+    if re.fullmatch(r"-?\d+(\.\d+)?", value):
+        return value
+    return ""
 
 def validate_value_type(value, expected_type, date_format=None, timestamp_format=None):
     value = clean_value(value)
