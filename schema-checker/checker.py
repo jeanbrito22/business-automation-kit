@@ -80,8 +80,10 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
         return isinstance(value, str)
     elif expected_type == "date":
         try:
-            datetime.strptime(value, date_format or "%d/%m/%Y")
-            return True
+            # Verifica se o valor casa exatamente com o formato
+            parsed = datetime.strptime(value, date_format or "%d/%m/%Y")
+            # Garante que o valor formatado de volta é idêntico ao original
+            return parsed.strftime(date_format or "%d/%m/%Y") == value
         except:
             return False
     elif expected_type == "timestamp":
