@@ -185,6 +185,9 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
                     corrected_row[source_col] = cleaned
                 else:
                     corrected_row[source_col] = value  # mantém o valor original para análise
+            elif expected_type == "timestamp":
+                normalized = normalize_timestamp(value, input_settings["spark_read_args"].get("timestampFormat", "%d/%m/%Y %H:%M:%S"))
+                corrected_row[source_col] = normalized if normalized else value
             else:
                 corrected_row[source_col] = value
 
