@@ -57,11 +57,17 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
     value = clean_value(value)
 
     if expected_type == "integer":
-        if any(c in value for c in ["R$", ",", "."]):
-            return False
+        value = clean_value(value)
         try:
-            int(value)
-            return True
+            # Remove ponto se for formato como 140.000
+            if "." in value:
+                float_val = float(value.replace(",", "."))
+                if float_val.is_integer():
+                    return True
+                return False
+            else:
+                int(value)
+                return True
         except:
             return False
     elif expected_type == "decimal":
@@ -176,7 +182,12 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
                     corrected_row[source_col] = ""
             elif expected_type == "integer":
                 try:
-                    corrected_row[source_col] = str(int(value.replace(" ", ""))) if value else ""
+                    cleaned = value.replace(" ", "").replace(",", ".")
+                    float_val = float(cleaned)
+                    if float_val.is_integer():
+                        corrected_row[source_col] = str(int(float_val))
+                    else:
+                        corrected_row[source_col] = ""
                 except:
                     corrected_row[source_col] = ""
             elif expected_type == "date":
