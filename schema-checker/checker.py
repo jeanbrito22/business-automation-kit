@@ -3,6 +3,20 @@ import csv
 from utils.file_loader import load_csv, load_schema
 from datetime import datetime
 
+def convert_spark_format_to_strptime(spark_format: str) -> str:
+    replacements = {
+        "yyyy": "%Y",
+        "MM": "%m",
+        "dd": "%d",
+        "HH": "%H",
+        "mm": "%M",
+        "ss": "%S"
+    }
+    for spark, py in replacements.items():
+        spark_format = spark_format.replace(spark, py)
+    return spark_format
+
+
 def clean_value(value):
     if value is None:
         return ""
@@ -81,14 +95,16 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
         return isinstance(value, str)
     elif expected_type == "date":
         try:
-            datetime.strptime(value, date_format or "%d/%m/%Y")
-            return True
+            fmt = convert_spark_format_to_strptime(date_format or "%d/%m/%Y")
+            parsed = datetime.strptime(value, fmt)
+            return parsed.strftime(fmt) == value
         except:
             return False
     elif expected_type == "timestamp":
-        value = normalize_timestamp(value, timestamp_format or "%d/%m/%Y %H:%M:%S")
         try:
-            datetime.strptime(value, timestamp_format or "%d/%m/%Y %H:%M:%S")
+            fmt = convert_spark_format_to_strptime(timestamp_format or "%d/%m/%Y %H:%M:%S")
+            normalized = normalize_timestamp(value, fmt)
+            datetime.strptime(normalized, fmt)
             return True
         except:
             return False
