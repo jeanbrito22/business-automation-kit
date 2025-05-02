@@ -183,13 +183,21 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
             elif expected_type == "integer":
                 try:
                     cleaned = value.replace(" ", "").replace(",", ".")
-                    float_val = float(cleaned)
-                    if float_val.is_integer():
-                        corrected_row[source_col] = str(int(float_val))
+                    if re.fullmatch(r"\d+\.(0{1,3})", cleaned):
+                        # Ex: 14.000 → 14000
+                        parts = cleaned.split(".")
+                        corrected_row[source_col] = parts[0] + parts[1]
+                    elif "." in cleaned:
+                        float_val = float(cleaned)
+                        if float_val.is_integer():
+                            corrected_row[source_col] = str(int(float_val))
+                        else:
+                            corrected_row[source_col] = ""
                     else:
-                        corrected_row[source_col] = ""
+                        corrected_row[source_col] = str(int(cleaned))
                 except:
                     corrected_row[source_col] = ""
+
             elif expected_type == "date":
                 cleaned = clean_value(value)
                 if cleaned and validate_value_type(cleaned, "date", date_format):
