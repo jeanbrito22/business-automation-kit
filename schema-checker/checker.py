@@ -12,6 +12,7 @@ def clean_value(value):
         return ""
     return value
 
+
 def normalize_timestamp(value, timestamp_format="%d/%m/%Y %H:%M:%S"):
     if not value:
         return ""
@@ -80,10 +81,8 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
         return isinstance(value, str)
     elif expected_type == "date":
         try:
-            # Verifica se o valor casa exatamente com o formato
-            parsed = datetime.strptime(value, date_format or "%d/%m/%Y")
-            # Garante que o valor formatado de volta é idêntico ao original
-            return parsed.strftime(date_format or "%d/%m/%Y") == value
+            datetime.strptime(value, date_format or "%d/%m/%Y")
+            return True
         except:
             return False
     elif expected_type == "timestamp":
@@ -198,7 +197,7 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
                 if cleaned and validate_value_type(cleaned, "date", date_format):
                     corrected_row[source_col] = cleaned
                 else:
-                    corrected_row[source_col] = value  # mantém o valor original para análise
+                    corrected_row[source_col] = ""  # nao mantém o valor original para análise
             elif expected_type == "timestamp":
                 normalized = normalize_timestamp(value, input_settings["spark_read_args"].get("timestampFormat", "%d/%m/%Y %H:%M:%S"))
                 corrected_row[source_col] = normalized if normalized else value
