@@ -103,7 +103,7 @@ def validate_csv_against_schema(schema_path, csv_path):
     header = input_settings["spark_read_args"].get("header", True)
     date_format = input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y")
 
-    csv_data = load_csv(csv_path, delimiter=delimiter)
+    csv_data = load_csv(csv_path, schema_path, delimiter=delimiter)
 
     expected_columns = [col["source_column"] for col in schema]
     csv_columns = csv_data[0].keys()
@@ -164,7 +164,7 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
     delimiter = input_settings["spark_read_args"].get("sep", ",")
     date_format = input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y")
 
-    csv_data = load_csv(input_csv_path, delimiter=delimiter)
+    csv_data = load_csv(input_csv_path, schema_path, delimiter=delimiter)
     expected_columns = [col["source_column"] for col in schema]
 
     corrected_data = []

@@ -10,11 +10,11 @@ def run_batch():
     resultados = []
 
     for schema_file in os.listdir(SCHEMA_DIR):
-        if not schema_file.startswith("tb_file_") or not schema_file.endswith(".json"):
+        if not schema_file.startswith("file_ingestion_") or not schema_file.endswith(".json"):
             continue
         
         # Remove o prefixo e o sufixo do nome
-        table_name = schema_file.replace("tb_file_", "").replace(".json", "")
+        table_name = schema_file.replace("file_ingestion_", "").replace(".json", "")
         schema_path = os.path.join(SCHEMA_DIR, schema_file)
         input_path = os.path.join(INPUT_DIR, f"tb_file_{table_name}.csv")
         output_path = os.path.join(OUTPUT_DIR, f"{table_name}.csv")

@@ -6,14 +6,14 @@ def load_schema(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def load_csv(path, delimiter=","):
+def load_csv(path, schema_path, delimiter=","):
     with open(path, newline='', encoding='utf-8-sig') as f:
         reader = csv.reader(f, delimiter=delimiter)
         lines = list(reader)
 
     # Header normalizado
     raw_headers = lines[0]
-    schema = load_schema("schema/sample_schema.json")
+    schema = load_schema(schema_path)
     expected_fields = [col["source_column"] for col in schema["table_spec"][0]["schema"]]
 
     def normalize_header(h):
