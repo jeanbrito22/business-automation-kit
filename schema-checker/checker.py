@@ -12,6 +12,31 @@ def clean_value(value):
         return ""
     return value
 
+def normalize_timestamp(value, timestamp_format="%d/%m/%Y %H:%M:%S"):
+    if not value:
+        return ""
+
+    value = clean_value(value)
+
+    # Casos parciais → completa com 0s
+    try:
+        # Só data
+        if re.fullmatch(r"\d{2}/\d{2}/\d{4}", value):
+            return f"{value} 00:00:00"
+        # Data + hora
+        if re.fullmatch(r"\d{2}/\d{2}/\d{4} \d{2}", value):
+            return f"{value}:00:00"
+        # Data + hora:minuto
+        if re.fullmatch(r"\d{2}/\d{2}/\d{4} \d{2}:\d{2}", value):
+            return f"{value}:00"
+
+        # Já está no formato esperado
+        datetime.strptime(value, timestamp_format)
+        return value
+    except:
+        return ""
+
+
 def normalize_decimal(value):
     if value is None:
         return ""
@@ -54,6 +79,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
         except:
             return False
     elif expected_type == "timestamp":
+        value = normalize_timestamp(value, timestamp_format or "%d/%m/%Y %H:%M:%S")
         try:
             datetime.strptime(value, timestamp_format or "%d/%m/%Y %H:%M:%S")
             return True
