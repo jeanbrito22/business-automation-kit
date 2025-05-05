@@ -1,6 +1,4 @@
 # checker/validator.py
-import re
-import csv
 from utils.file_loader import load_csv, load_schema
 from utils.format_utils import convert_spark_format_to_strptime
 from checker.corrector import clean_value, normalize_integer, normalize_decimal
@@ -44,7 +42,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
             return False
     return False
 
-def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/validation_report.log"), append=False):
+def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/log/log.log"), append=False):
     schema_data = load_schema(schema_path)
     table_spec = schema_data["table_spec"][0]
     schema = table_spec["schema"]
