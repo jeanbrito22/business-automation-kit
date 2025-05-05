@@ -73,7 +73,7 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/valid
                 date_format if expected_type == "date" else None,
                 input_settings["spark_read_args"].get("timestampFormat") if expected_type == "timestamp" else None
             ):
-                errors.append(f"Row {i+1}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
+                errors.append(f"Row {i+2}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
 
     with open(log_path, "a", encoding="utf-8") as log:
         table_name = csv_path.stem.replace("tb_file_", "")
