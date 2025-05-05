@@ -18,7 +18,11 @@ def normalize_decimal(value):
     if value is None:
         return ""
     value = clean_value(value)
-    value = value.replace("R$", "").replace(" ", "").replace(".", "").replace(",", ".")
+    value = value.replace("R$", "").replace(" ", "")
+
+    if "," in value:
+        value = value.replace(".", "").replace(",", ".")
+
     if re.fullmatch(r"-?\d+(\.\d+)?", value):
         return value
     return ""
@@ -26,12 +30,17 @@ def normalize_decimal(value):
 def normalize_integer(value):
     if value is None:
         return ""
-    value = clean_value(value).replace(" ", "")
-    if value.endswith(".0"):
-        value = value.replace(".0", "")
-    if value.replace(".", "").isdigit():
-        return str(int(float(value)))
-    return ""
+    value = clean_value(value).replace(" ", "").replace(",", ".")
+
+    try:
+        float_val = float(value)
+        if float_val.is_integer():
+            return str(int(float_val))
+        else:
+            parts = value.split(".")
+            return parts[0] + parts[1]
+    except:
+        return ""
 
 def validate_value_type(value, expected_type, date_format=None, timestamp_format=None):
     if expected_type == "integer":
