@@ -1,37 +1,43 @@
-from checker import validate_csv_against_schema, generate_corrected_csv
-import os
+# main.py
+import argparse
+from pathlib import Path
+from checker.validator import validate_csv_against_schema
+from checker.corrector import generate_corrected_csv
 
-SCHEMA_DIR = "schema"
-INPUT_DIR = "data"
-OUTPUT_DIR = os.path.join(INPUT_DIR, "outputs")
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+BASE_DIR = Path(__file__).resolve().parent
+SCHEMA_DIR = BASE_DIR / "schema"
+DATA_DIR = BASE_DIR / "data"
+OUTPUT_DIR = DATA_DIR / "outputs"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-def run_batch():
+def run_batch(mode="validate"):
     resultados = []
 
-    for schema_file in os.listdir(SCHEMA_DIR):
-        if not schema_file.startswith("file_ingestion_") or not schema_file.endswith(".json"):
-            continue
-        
-        # Remove o prefixo e o sufixo do nome
-        table_name = schema_file.replace("file_ingestion_", "").replace(".json", "")
-        schema_path = os.path.join(SCHEMA_DIR, schema_file)
-        input_path = os.path.join(INPUT_DIR, f"tb_file_{table_name}.csv")
-        output_path = os.path.join(OUTPUT_DIR, f"{table_name}.csv")
+    for schema_file in SCHEMA_DIR.glob("tb_file_*.json"):
+        table_name = schema_file.stem.replace("tb_file_", "")
+        input_path = DATA_DIR / f"tb_file_{table_name}.csv"
+        output_path = OUTPUT_DIR / f"{table_name}.csv"
 
-        if not os.path.exists(input_path):
+        if not input_path.exists():
             resultados.append((table_name, "❌ CSV de entrada não encontrado"))
             continue
+
         try:
-            validate_csv_against_schema(schema_path, input_path)
-            generate_corrected_csv(schema_path, input_path, output_path)
-            resultados.append((table_name, "✅ Corrigido com sucesso"))
+            validate_csv_against_schema(schema_file, input_path)
+            if mode == "correct":
+                generate_corrected_csv(schema_file, input_path, output_path)
+            resultados.append((table_name, "✅ Processado com sucesso"))
         except Exception as e:
             resultados.append((table_name, f"❌ Erro: {str(e)}"))
 
     return resultados
 
 if __name__ == "__main__":
-    for tabela, status in run_batch():
-        print(f"{tabela}: {status}")
+    parser = argparse.ArgumentParser(description="Validador e Corretor de CSVs baseado em schema JSON.")
+    parser.add_argument("--mode", choices=["validate", "correct"], default="validate",
+                        help="Modo de execução: apenas validar ou validar + corrigir")
+    args = parser.parse_args()
 
+    print(f"\n🛠️  Modo de execução: {args.mode}\n")
+    for tabela, status in run_batch(args.mode):
+        print(f"{tabela}: {status}")
