@@ -18,7 +18,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
         except:
             return False
 
-    elif expected_type == "decimal":
+    elif expected_type in ("float", "decimal"):
         try:
             float(normalize_decimal(value))
             return True
@@ -98,3 +98,5 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/logs/
                 log.write(f" - {err}\n")
         else:
             log.write("✅ CSV is valid against schema\n")
+    
+    print(f"\n💾 Validate CSV saved to")

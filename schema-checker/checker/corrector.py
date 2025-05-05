@@ -71,7 +71,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
             return True
         except:
             return False
-    elif expected_type == "decimal":
+    elif expected_type in ("decimal", "float"):
         try:
             float(normalize_decimal(value))
             return True
@@ -116,7 +116,7 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
             expected_type = column["type"]
             value = clean_value(row.get(source_col, ""))
 
-            if expected_type == "decimal":
+            if expected_type in ("float", "decimal"):
                 corrected_row[source_col] = normalize_decimal(value)
             elif expected_type == "integer":
                 corrected_row[source_col] = normalize_integer(value)

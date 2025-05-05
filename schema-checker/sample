@@ -1,0 +1,288 @@
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'
+
+
+=== Validação do arquivo: sample.csv ===
+
+ - Columns found in CSV but not in schema:
+    · Aleatorio
+ - Header error: Unexpected column 'Aleatorio' not in schema
+ - Header error: Column order does not match schema
+ - Row 2: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 2: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 2: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 2: Column 'Valor' expected type 'float', got '0.85'
+ - Row 3: Column 'Data Pesquisa' expected type 'timestamp', got '05/05/2025 00:00'
+ - Row 3: Column 'vlr_referencia' expected type 'integer', got '140.0'
+ - Row 3: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 3: Column 'Valor' expected type 'float', got '0.85'
+ - Row 4: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 4: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 4: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 4: Column 'Valor' expected type 'float', got '0.85'
+ - Row 5: Column 'Data Pesquisa' expected type 'timestamp', got '15/03/2025 00:00'
+ - Row 5: Column 'vlr_referencia' expected type 'integer', got '13.0'
+ - Row 5: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 5: Column 'Valor' expected type 'float', got '0.08'
+ - Row 6: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 6: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 6: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 6: Column 'Valor' expected type 'float', got '0.85'
+ - Row 7: Column 'Data Pesquisa' expected type 'timestamp', got '13/04/2025 00:00'
+ - Row 7: Column 'vlr_referencia' expected type 'integer', got '1.0'
+ - Row 7: Column 'Previsão de Implantação' expected type 'date', got '0'
+ - Row 7: Column 'Valor' expected type 'float', got '0.6'

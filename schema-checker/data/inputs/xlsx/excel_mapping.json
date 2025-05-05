@@ -1,9 +1,14 @@
 [
-    {
-      "source": "sample.xlsx",
-      "sheet": "Base",
-      "target": "tb_file_sample.csv",
-      "expand_dates_to": ["Ano", "Mes", "Valor"]
-    }
+  {
+    "filename": "sample copy.xlsx",
+    "sheet_name": "Aletorio",
+    "output_csv_name": "tb_file_sample_copy.csv",
+    "expand_dates_to": []
+  },
+  {
+    "filename": "sample.xlsx",
+    "sheet_name": "Base",
+    "output_csv_name": "tb_file_sample.csv",
+    "expand_dates_to": []
+  }
 ]
-  
