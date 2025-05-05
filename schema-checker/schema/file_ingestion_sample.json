@@ -63,7 +63,7 @@
                     "order": "5",
                     "rename_column": "mes",
                     "source_column": "Mes",
-                    "type": "date"
+                    "type": "integer"
                 },
                 {
                     "comment": "Campo 'Ano'",

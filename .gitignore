@@ -174,3 +174,8 @@ cython_debug/
 .pypirc
 schema/sample_schema.json
 schema/sample_schema.json
+
+data/inputs/sample.csv
+schema/sample_schema.json
+
+temp.py

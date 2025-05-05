@@ -11,8 +11,20 @@ def convert_excels_to_csv(mapping_path: Path, input_dir: Path, output_dir: Path)
     for item in mappings:
         excel_path = input_dir / item["source"]
         sheet_name = item["sheet"]
-        output_csv = output_dir / item["target"]
+        output_csv_name = item["target"]
+        output_csv = output_dir / output_csv_name
         expand_target = item.get("expand_dates_to", [])
+
+        # Determina o nome do schema correspondente com base no nome do CSV de saída
+        table_name = output_csv_name.replace("tb_file_", "").replace(".csv", "")
+        schema_path = Path("schema") / f"file_ingestion_{table_name}.json"
+
+        if not schema_path.exists():
+            raise FileNotFoundError(f"❌ Schema não encontrado para {table_name}: {schema_path}")
+
+        with open(schema_path, "r", encoding="utf-8") as sf:
+            schema_data = json.load(sf)
+            sep = schema_data["table_spec"][0]["input"]["spark_read_args"].get("sep", ",")
 
         df = pd.read_excel(excel_path, sheet_name=sheet_name, engine="openpyxl")
 
@@ -38,7 +50,7 @@ def convert_excels_to_csv(mapping_path: Path, input_dir: Path, output_dir: Path)
 
             df = pd.DataFrame(new_rows)
 
-        df.to_csv(output_csv, index=False, encoding="utf-8-sig")
+        df.to_csv(output_csv, sep=sep, index=False, encoding="utf-8-sig")
         print(f"✅ Gerado: {output_csv}")
 
 
