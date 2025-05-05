@@ -14,7 +14,7 @@ def run_batch(mode="validate"):
     resultados = []
 
     for schema_file in SCHEMA_DIR.glob("file_ingestion_*.json"):
-        table_name = schema_file.stem.replace("tb_file_", "")
+        table_name = schema_file.stem.replace("file_ingestion_", "")
         input_path = DATA_DIR / f"tb_file_{table_name}.csv"
         output_path = OUTPUT_DIR / f"{table_name}.csv"
 
