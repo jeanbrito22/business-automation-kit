@@ -30,17 +30,13 @@ def normalize_decimal(value):
 def normalize_integer(value):
     if value is None:
         return ""
-    value = clean_value(value).replace(" ", "").replace(",", ".")
+    value = clean_value(value)
+    value = value.replace(" ", "").replace(".", "").replace(",", "")
 
-    try:
-        float_val = float(value)
-        if float_val.is_integer():
-            return str(int(float_val))
-        else:
-            parts = value.split(".")
-            return parts[0] + parts[1]
-    except:
+    if not value.isdigit():
         return ""
+
+    return value
 
 def validate_value_type(value, expected_type, date_format=None, timestamp_format=None):
     if expected_type == "integer":
