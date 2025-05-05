@@ -40,7 +40,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
             return False
     return False
 
-def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/validation_report.log")):
+def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/validation_report.log"), append=False):
     schema_data = load_schema(schema_path)
     table_spec = schema_data["table_spec"][0]
     schema = table_spec["schema"]
@@ -75,7 +75,7 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/valid
             ):
                 errors.append(f"Row {i+2}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
 
-    with open(log_path, "a", encoding="utf-8") as log:
+    with open(log_path, "a" if append else "w", encoding="utf-8") as log:
         table_name = csv_path.stem.replace("tb_file_", "")
         log.write(f"\n\n=== Validação do arquivo: {table_name}.csv ===\n\n")
 

@@ -13,7 +13,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 def run_batch(mode="validate"):
     resultados = []
 
-    for schema_file in SCHEMA_DIR.glob("file_ingestion_*.json"):
+    for idx, schema_file in enumerate(SCHEMA_DIR.glob("file_ingestion_*.json")):
         table_name = schema_file.stem.replace("file_ingestion_", "")
         input_path = DATA_DIR / f"tb_file_{table_name}.csv"
         output_path = OUTPUT_DIR / f"{table_name}.csv"
@@ -23,7 +23,7 @@ def run_batch(mode="validate"):
             continue
 
         try:
-            validate_csv_against_schema(schema_file, input_path)
+            validate_csv_against_schema(schema_file, input_path, append=(idx > 0))
             if mode == "correct":
                 generate_corrected_csv(schema_file, input_path, output_path)
             resultados.append((table_name, "✅ Processado com sucesso"))
