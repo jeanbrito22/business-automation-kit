@@ -43,7 +43,7 @@ def validate_csv_against_schema(schema_path, csv_path):
             ):
                 errors.append(f"Row {i+1}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
 
-    with open("data/validation_report.log", "w", encoding="utf-8") as log:
+    with open("data/validation_report.log", "a", encoding="utf-8") as log:
         table_name = csv_path.stem.replace("tb_file_", "")
         log.write(f"\n\n=== Validação do arquivo: {table_name}.csv ===\n\n")
         if errors:
