@@ -42,7 +42,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
             return False
     return False
 
-def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/log/log.log"), append=False):
+def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/logs/validation_report.log"), append=False):
     schema_data = load_schema(schema_path)
     table_spec = schema_data["table_spec"][0]
     schema = table_spec["schema"]

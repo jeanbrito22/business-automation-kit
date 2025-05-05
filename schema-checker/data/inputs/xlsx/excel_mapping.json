@@ -1,8 +1,8 @@
 [
     {
-      "source": "Planilha (2).xlsx",
-      "sheet": "dados_bi",
-      "target": "tb_file_planilha_2.csv"
+      "source": "sample.xlsx",
+      "sheet": "Base",
+      "target": "tb_file_sample.csv"
     }
 ]
   

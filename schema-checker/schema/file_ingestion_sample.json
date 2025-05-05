@@ -1,0 +1,65 @@
+{
+    "table_spec": [
+        {
+            "error": {
+                "spark_write_args":{
+                    "format": "parquet",
+                    "mode": "append",
+                    "path": "s3://bucket/path/to/file.parquet"
+                }
+
+            },
+            "input": {
+                "enable_schema_validation": true,
+                "spark_read_args":{
+                    "encoding": "UTF-8",
+                    "header": true,
+                    "sep": ";",
+                    "timestampFormat": "dd/MM/yyyy HH:mm:ss",
+                    "dateFormat": "dd/MM/yyyy"
+                }
+            },
+            "output": {
+                "database": "db_name",
+                "format": "parquet",
+                "mode": "append",
+                "path": "s3://bucket/path/to/file.parquet",
+                "table": "tb_file_sample",
+                "anonymize_columns": {
+                    "column1": "column1"
+                }
+            },
+            "schema": [
+                {
+                    "comment": "Campo 'ID da Pesquisa'",
+                    "order": "1",
+                    "rename_column": "id_pesquisa",
+                    "source_column": "ID da Pesquisa",
+                    "type": "string"
+                },
+                {
+                    "comment": "Campo 'Data Pesquisa'",
+                    "order": "2",
+                    "rename_column": "data_pesquisa",
+                    "source_column": "Data Pesquisa",
+                    "type": "timestamp"
+                },
+                {
+                    "comment": "Campo 'vlr_referencia'",
+                    "order": "3",
+                    "rename_column": "vlr_referencia",
+                    "source_column": "vlr_referencia",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Previsão de Implantação'",
+                    "order": "4",
+                    "rename_column": "previsao_implantacao",
+                    "source_column": "Previsão de Implantação",
+                    "type": "date"
+                }
+            ]
+        }
+    ],
+    "type": "csv"
+}

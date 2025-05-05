@@ -1,5 +1,0 @@
-# data/sample.csv
-id,name,age
-1,Alice,30
-2,Bob,not_a_number
-3,,25

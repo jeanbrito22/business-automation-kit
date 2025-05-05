@@ -14,6 +14,32 @@ def clean_value(value):
         return ""
     return value
 
+def normalize_timestamp(value, timestamp_format="%d/%m/%Y %H:%M:%S"):
+    if not value:
+        return ""
+
+    value = clean_value(value)
+
+    try:
+        # Se já está no formato completo, retorna como está
+        datetime.strptime(value, timestamp_format)
+        return value
+    except:
+        pass
+
+    # Casos parciais → completa com 0s
+    try:
+        if re.fullmatch(r"\d{2}/\d{2}/\d{4}", value):
+            return f"{value} 00:00:00"
+        if re.fullmatch(r"\d{2}/\d{2}/\d{4} \d{2}", value):
+            return f"{value}:00:00"
+        if re.fullmatch(r"\d{2}/\d{2}/\d{4} \d{2}:\d{2}", value):
+            return f"{value}:00"
+    except:
+        pass
+
+    return ""
+
 def normalize_decimal(value):
     if value is None:
         return ""
@@ -63,6 +89,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
     elif expected_type == "timestamp":
         try:
             fmt = convert_spark_format_to_strptime(timestamp_format or "%d/%m/%Y %H:%M:%S")
+            value = normalize_timestamp(value, fmt)
             parsed = datetime.strptime(value, fmt)
             return True
         except:
@@ -100,7 +127,7 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
                     corrected_row[source_col] = ""
             elif expected_type == "timestamp":
                 if validate_value_type(value, "timestamp", timestamp_format):
-                    corrected_row[source_col] = value
+                    corrected_row[source_col] = normalize_timestamp(value)
                 else:
                     corrected_row[source_col] = f"{value.strip()} 00:00:00" if value.strip() else ""
             else:
