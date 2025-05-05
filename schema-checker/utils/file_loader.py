@@ -16,18 +16,20 @@ def load_csv(path, schema_path=None, delimiter=","):
             (s for s in expected_fields if unidecode(s) == unidecode(cleaned)), cleaned)
 
     with open(path, newline='', encoding='utf-8-sig') as f:
-        lines = list(csv.reader(f, delimiter=delimiter))
-        if not lines:
-            return []
-
-        raw_headers = lines[0]
-        headers = [normalize_header(h) for h in raw_headers]
-        reader = csv.DictReader(lines[1:], fieldnames=headers, delimiter=delimiter)
+        reader = csv.reader(f, delimiter=delimiter)
         rows = list(reader)
 
-    for row in rows:
+    if not rows:
+        return []
+
+    raw_headers = rows[0]
+    headers = [normalize_header(h) for h in raw_headers]
+    dict_rows = [dict(zip(headers, row)) for row in rows[1:]]
+
+    # Correções de headers com espaços duplicados
+    for row in dict_rows:
         for key in list(row.keys()):
             if key.strip() != key or "  " in key:
                 row[" ".join(key.strip().split())] = row.pop(key)
 
-    return rows
+    return dict_rows
