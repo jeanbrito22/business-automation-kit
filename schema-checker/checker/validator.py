@@ -11,11 +11,15 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
     value = clean_value(value)
 
     if expected_type == "integer":
+        value = clean_value(value)
+        if "." in value or "," in value:
+            return False  # ponto ou vírgula não são aceitos no formato original
         try:
-            int(normalize_integer(value))
+            int(value)
             return True
         except:
             return False
+
     elif expected_type == "decimal":
         try:
             float(normalize_decimal(value))
