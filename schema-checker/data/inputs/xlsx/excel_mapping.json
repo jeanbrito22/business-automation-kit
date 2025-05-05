@@ -2,7 +2,8 @@
     {
       "source": "sample.xlsx",
       "sheet": "Base",
-      "target": "tb_file_sample.csv"
+      "target": "tb_file_sample.csv",
+      "expand_dates_to": ["Ano", "Mes", "Valor"]
     }
 ]
   

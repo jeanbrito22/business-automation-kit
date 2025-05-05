@@ -31,6 +31,7 @@ def run_batch(mode="validate"):
         input_path = INPUT_CSV_DIR / f"tb_file_{table_name}.csv"
         output_path = OUTPUT_DIR / f"{table_name}.csv"
         log_path = LOG_DIR / "validation_report.log"
+
         if not input_path.exists():
             resultados.append((table_name, "❌ CSV de entrada não encontrado"))
             continue

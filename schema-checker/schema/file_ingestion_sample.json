@@ -57,6 +57,27 @@
                     "rename_column": "previsao_implantacao",
                     "source_column": "Previsão de Implantação",
                     "type": "date"
+                },
+                {
+                    "comment": "Campo 'Mes'",
+                    "order": "5",
+                    "rename_column": "mes",
+                    "source_column": "Mes",
+                    "type": "date"
+                },
+                {
+                    "comment": "Campo 'Ano'",
+                    "order": "5",
+                    "rename_column": "ano",
+                    "source_column": "Ano",
+                    "type": "integer"
+                },
+                {
+                    "comment": "Campo 'Valor'",
+                    "order": "5",
+                    "rename_column": "valor",
+                    "source_column": "Valor",
+                    "type": "float"
                 }
             ]
         }

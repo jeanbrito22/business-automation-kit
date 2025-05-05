@@ -1,27 +1,59 @@
-# checker/xlsx_converter.py
-import json
 import pandas as pd
+from pathlib import Path
+import json
+from datetime import datetime
 
-def convert_excels_to_csv(mapping_path, xlsx_dir, output_csv_dir):
+
+def convert_excels_to_csv(mapping_path: Path, input_dir: Path, output_dir: Path):
     with open(mapping_path, "r", encoding="utf-8") as f:
         mappings = json.load(f)
 
     for item in mappings:
-        source = item["source"]
-        sheet = item["sheet"]
-        target = item["target"]
+        excel_path = input_dir / item["source"]
+        sheet_name = item["sheet"]
+        output_csv = output_dir / item["target"]
+        expand_target = item.get("expand_dates_to", [])
 
-        source_path = xlsx_dir / source
-        target_path = output_csv_dir / target
+        df = pd.read_excel(excel_path, sheet_name=sheet_name, engine="openpyxl")
 
-        if not source_path.exists():
-            print(f"❌ Arquivo Excel não encontrado: {source_path.name}")
-            continue
+        if expand_target:
+            if len(expand_target) != 3:
+                raise ValueError(f"❌ 'expand_dates_to' deve ter exatamente 3 valores (ex: ['Ano', 'Mes', 'Valor']) no arquivo {excel_path.name}")
 
+            fixed_cols = [col for col in df.columns if not is_date_column(col)]
+            value_cols = [col for col in df.columns if is_date_column(col)]
+
+            new_rows = []
+            for _, row in df.iterrows():
+                for col in value_cols:
+                    try:
+                        parsed_date = try_parse_date(str(col))
+                        new_row = row[fixed_cols].copy()
+                        new_row[expand_target[0]] = parsed_date.year
+                        new_row[expand_target[1]] = parsed_date.month
+                        new_row[expand_target[2]] = row[col] if pd.notnull(row[col]) else 0
+                        new_rows.append(new_row)
+                    except Exception as e:
+                        print(f"Erro ao processar coluna {col} como data: {e}")
+
+            df = pd.DataFrame(new_rows)
+
+        df.to_csv(output_csv, index=False, encoding="utf-8-sig")
+        print(f"✅ Gerado: {output_csv}")
+
+
+def is_date_column(value):
+    try:
+        try_parse_date(str(value))
+        return True
+    except:
+        return False
+
+
+def try_parse_date(value):
+    for fmt in ["%d/%m/%y", "%d/%m/%Y", "%Y-%m-%d 00:00:00"]:
         try:
-            df = pd.read_excel(source_path, sheet_name=sheet, dtype=str)
-            target_path.parent.mkdir(parents=True, exist_ok=True)
-            df.to_csv(target_path, index=False, encoding="utf-8-sig")
-            print(f"✅ Convertido: {source_path.name} → {target_path.name}")
-        except Exception as e:
-            print(f"❌ Erro ao converter {source_path.name} (aba: {sheet}): {e}")
+            return datetime.strptime(value, fmt)
+        except:
+            continue
+    raise ValueError(f"Formato de data inválido: {value}")
