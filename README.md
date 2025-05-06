@@ -69,7 +69,7 @@ A interface gráfica permite:
 ### ▶️ Como executar:
 
 ```bash
-streamlit run interface/app.py
+streamlit run app.py
 ```
 
 ### 🌐 Acessando:
