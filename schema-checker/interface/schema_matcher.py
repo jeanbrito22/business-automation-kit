@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 def check_csv_schema_compatibility(csv_dir: Path, schema_dir: Path):
     missing = []
@@ -8,3 +9,15 @@ def check_csv_schema_compatibility(csv_dir: Path, schema_dir: Path):
         if not schema_path.exists():
             missing.append(csv_file.name)
     return missing
+
+def identify_non_standard_csvs(csv_dir: Path, schema_dir: Path):
+    schema_pattern = re.compile(r"file_ingestion_(.+)\.json")
+    expected_csv_names = {
+        f"tb_file_{schema_pattern.match(f.name).group(1)}.csv"
+        for f in schema_dir.glob("file_ingestion_*.json")
+        if schema_pattern.match(f.name)
+    }
+
+    actual_csv_names = {f.name for f in csv_dir.glob("*.csv")}
+    non_standard_csvs = actual_csv_names - expected_csv_names
+    return non_standard_csvs

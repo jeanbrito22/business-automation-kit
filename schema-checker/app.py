@@ -1,10 +1,10 @@
 import streamlit as st
 from datetime import datetime
 from pathlib import Path
-import os
+import os, re
 from interface.uploader import handle_uploads
 from interface.mapping_builder import build_excel_mapping_interface
-from interface.schema_matcher import check_csv_schema_compatibility
+from interface.schema_matcher import check_csv_schema_compatibility, identify_non_standard_csvs
 from interface.runner import run_processing_pipeline
 
 st.set_page_config(page_title="CSV Validator", layout="wide")
@@ -22,6 +22,7 @@ DATA_LOG_DIR = DATA_DIR / "logs"
 DATA_INPUT_CSV = DATA_INPUT_DIR / "csv"
 DATA_INPUT_XLSX = DATA_INPUT_DIR / "xlsx"
 MAPPING_PATH = DATA_INPUT_XLSX / "excel_mapping.json"
+
 
 # Garante estrutura mínima
 for d in [DATA_INPUT_CSV, DATA_INPUT_XLSX, DATA_OUTPUT_DIR, DATA_LOG_DIR]:
@@ -44,13 +45,22 @@ st.header("2. Configurar mapping para arquivos Excel")
 build_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
 
 # Checagem dos CSVs e schemas
+# Verifica CSVs sem schema correspondente
 st.header("3. Verificação de compatibilidade de schemas")
 missing_schemas = check_csv_schema_compatibility(DATA_INPUT_CSV, SCHEMA_DIR)
+csvs_fora_do_padrao = identify_non_standard_csvs(DATA_INPUT_CSV, SCHEMA_DIR)
+
 if missing_schemas:
     st.error("Schemas ausentes para os seguintes arquivos CSV:")
     for fname in missing_schemas:
         st.code(fname)
     st.stop()
+elif csvs_fora_do_padrao:
+    st.warning("Alguns arquivos CSV foram ignorados por não seguirem o padrão esperado:")
+    for fname in csvs_fora_do_padrao:
+        st.code(fname)
+    st.markdown("➡️ Esperado: arquivos com nome no formato `tb_file_<nome>.csv` para que o schema `file_ingestion_<nome>.json` seja aplicado.")
+    st.markdown("✅ Você pode renomear o arquivo ou gerar um schema correspondente.")
 else:
     st.success("Todos os arquivos CSV possuem schema correspondente.")
 
