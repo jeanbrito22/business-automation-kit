@@ -1,21 +1,24 @@
+
 import pandas as pd
 from pathlib import Path
 import json
 from datetime import datetime
+from collections import defaultdict
 
 
 def convert_excels_to_csv(mapping_path: Path, input_dir: Path, output_dir: Path):
     with open(mapping_path, "r", encoding="utf-8") as f:
         mappings = json.load(f)
 
+    dfs_por_saida = defaultdict(list)
+    seps = {}
+
     for item in mappings:
         excel_path = input_dir / item["filename"]
         sheet_name = item["sheet_name"]
         output_csv_name = item["output_csv_name"]
-        output_csv = output_dir / output_csv_name
         expand_target = item.get("expand_dates_to", [])
 
-        # Determina o nome do schema correspondente com base no nome do CSV de saída
         table_name = output_csv_name.replace("tb_file_", "").replace(".csv", "")
         schema_path = Path("schema") / f"file_ingestion_{table_name}.json"
 
@@ -25,6 +28,7 @@ def convert_excels_to_csv(mapping_path: Path, input_dir: Path, output_dir: Path)
         with open(schema_path, "r", encoding="utf-8") as sf:
             schema_data = json.load(sf)
             sep = schema_data["table_spec"][0]["input"]["spark_read_args"].get("sep", ",")
+            seps[output_csv_name] = sep
 
         df = pd.read_excel(excel_path, sheet_name=sheet_name, engine="openpyxl")
 
@@ -50,7 +54,13 @@ def convert_excels_to_csv(mapping_path: Path, input_dir: Path, output_dir: Path)
 
             df = pd.DataFrame(new_rows)
 
-        df.to_csv(output_csv, sep=sep, index=False, encoding="utf-8-sig")
+        dfs_por_saida[output_csv_name].append(df)
+
+    for output_csv_name, dfs in dfs_por_saida.items():
+        final_df = pd.concat(dfs, ignore_index=True)
+        output_csv = output_dir / output_csv_name
+        sep = seps.get(output_csv_name, ",")
+        final_df.to_csv(output_csv, sep=sep, index=False, encoding="utf-8-sig")
         print(f"✅ Gerado: {output_csv}")
 
 
