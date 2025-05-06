@@ -25,13 +25,21 @@ def build_excel_mapping_interface(xlsx_dir: Path, schema_dir: Path, mapping_path
         sample_df = xls.parse(sheet_name, nrows=1)
         st.write("Colunas disponíveis:", list(sample_df.columns))
 
-        expand_cols_input = st.text_input(
-            "Digite os nomes das colunas para expand_dates_to (ex: Ano, Mes, Valor)", 
-            value="Ano, Mes, Valor",
-            key=f"expand_{xlsx_file.name}"
+        use_expand = st.radio(
+            "🔄 Deseja transformar colunas de ano/mês/valor em linhas (pivotar)?",
+            ["Não", "Sim"],
+            key=f"expand_choice_{xlsx_file.name}",
+            horizontal=True
         )
 
-        expand_cols = [col.strip() for col in expand_cols_input.split(",") if col.strip()]
+        expand_cols = []
+        if use_expand == "Sim":
+            expand_cols_input = st.text_input(
+                "Quais colunas devem ser usadas para transformar em linhas? (ex: Ano, Mes, Valor)",
+                value="Ano, Mes, Valor",
+                key=f"expand_input_{xlsx_file.name}"
+            )
+            expand_cols = [col.strip() for col in expand_cols_input.split(",") if col.strip()]
 
         schema_escolhido = st.selectbox(
             f"Selecione o schema para {xlsx_file.name}",
