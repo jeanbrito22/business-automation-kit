@@ -1,49 +1,44 @@
+
 import streamlit as st
 import json
-import pandas as pd
 from pathlib import Path
 from collections import defaultdict
 import re
 
-def group_xlsx_by_prefix(xlsx_dir: Path):
-    groups = defaultdict(list)
+def separar_grupos_por_tamanho(xlsx_dir: Path):
+    grupos = defaultdict(list)
     for xlsx_file in xlsx_dir.glob("*.xlsx"):
         prefix = re.split(r"[_-]", xlsx_file.stem)[0].lower()
-        groups[prefix].append(xlsx_file)
-    return groups
+        grupos[prefix].append(xlsx_file)
+
+    grupos_agrupados = {k: v for k, v in grupos.items() if len(v) > 1}
+    arquivos_individuais = [v[0] for k, v in grupos.items() if len(v) == 1]
+
+    return grupos_agrupados, arquivos_individuais
 
 def gerar_nome_output(schema_filename):
     base = schema_filename.replace("file_ingestion_", "").replace(".json", "")
     return f"tb_file_{base}.csv"
 
-def build_grouped_excel_mapping_interface(xlsx_dir: Path, schema_dir: Path, mapping_path: Path):
-    st.markdown("### Mapeamento Agrupado de arquivos Excel por prefixo")
+def build_grouped_excel_mapping_interface(grupos_agrupados: dict, schema_dir: Path, mapping_path: Path):
+    st.markdown("### Mapeamento Agrupado (2+ arquivos com prefixo comum)")
+
+    if not grupos_agrupados:
+        st.info("Nenhum grupo com múltiplos arquivos encontrado.")
+        return
 
     schemas_disponiveis = sorted([
         f.name for f in schema_dir.glob("file_ingestion_*.json")
     ])
 
     mapping = []
-    grupos = group_xlsx_by_prefix(xlsx_dir)
 
-    for prefix, arquivos in grupos.items():
+    for prefix, arquivos in grupos_agrupados.items():
         st.subheader(f"Grupo: `{prefix}` ({len(arquivos)} arquivos)")
 
-        # Detecta abas disponíveis entre os arquivos
-        sheet_sugestoes = set()
-        for arq in arquivos:
-            try:
-                xls = pd.ExcelFile(xlsx_dir / arq.name)
-                sheet_sugestoes.update(xls.sheet_names)
-            except Exception:
-                pass
-
-        sheet_sugestoes = sorted(list(sheet_sugestoes)) or ["Plan1"]
-
-        sheet_name = st.selectbox(
-            f"Aba comum para os arquivos do grupo `{prefix}`",
-            options=sheet_sugestoes,
-            index=0,
+        sheet_name = st.text_input(
+            f"Nome da aba comum (ex: Plan1) para `{prefix}`",
+            value="Plan1",
             key=f"sheet_{prefix}"
         )
 
@@ -55,7 +50,7 @@ def build_grouped_excel_mapping_interface(xlsx_dir: Path, schema_dir: Path, mapp
 
         expand_cols = []
         usar_expand = st.radio(
-            f"Deseja transformar colunas em linhas (pivotar) para `{prefix}`?",
+            f"Pivotar colunas para `{prefix}`?",
             ["Não", "Sim"],
             key=f"expand_{prefix}",
             horizontal=True
@@ -63,7 +58,7 @@ def build_grouped_excel_mapping_interface(xlsx_dir: Path, schema_dir: Path, mapp
 
         if usar_expand == "Sim":
             expand_cols_input = st.text_input(
-                "Quais colunas devem ser usadas para expand_dates_to? (ex: Ano, Mes, Valor)",
+                "Colunas para expand_dates_to (ex: Ano, Mes, Valor)",
                 value="Ano, Mes, Valor",
                 key=f"expand_input_{prefix}"
             )
