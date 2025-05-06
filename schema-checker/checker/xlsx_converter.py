@@ -9,9 +9,9 @@ def convert_excels_to_csv(mapping_path: Path, input_dir: Path, output_dir: Path)
         mappings = json.load(f)
 
     for item in mappings:
-        excel_path = input_dir / item["source"]
-        sheet_name = item["sheet"]
-        output_csv_name = item["target"]
+        excel_path = input_dir / item["filename"]
+        sheet_name = item["sheet_name"]
+        output_csv_name = item["output_csv_name"]
         output_csv = output_dir / output_csv_name
         expand_target = item.get("expand_dates_to", [])
 

@@ -1,7 +1,7 @@
 import streamlit as st
+from datetime import datetime
 from pathlib import Path
-import shutil
-import json
+import os
 from interface.uploader import handle_uploads
 from interface.mapping_builder import build_excel_mapping_interface
 from interface.schema_matcher import check_csv_schema_compatibility
@@ -9,7 +9,7 @@ from interface.runner import run_processing_pipeline
 
 st.set_page_config(page_title="CSV Validator", layout="wide")
 
-st.title("📊 CSV & Excel Data Checker")
+st.title("📊 Validador de Dados - CSV & Excel")
 
 # Diretórios base
 BASE_DIR = Path(__file__).resolve().parent
@@ -57,17 +57,45 @@ else:
 # Ações possíveis
 st.header("4. Ações")
 mode = st.selectbox("Escolha a ação:", ["validar", "corrigir", "converter", "executar tudo"])
+
+# Define o estado inicial se ainda não estiver definido
+if "executado" not in st.session_state:
+    st.session_state.executado = False
+
 if st.button("🚀 Executar"):
+    st.session_state.executado = True
     run_processing_pipeline(mode, BASE_DIR, DATA_INPUT_CSV, DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH, DATA_OUTPUT_DIR, DATA_LOG_DIR)
     st.success("Processamento finalizado! Verifique os outputs e logs.")
 
-import time
-time.sleep(0.5)  # Aguarda o sistema finalizar escrita dos arquivos .log
+if st.session_state.executado:
+    st.header("5. Visualização dos logs")
 
-st.header("5. Visualização dos logs")
+    for log_file in sorted(DATA_LOG_DIR.glob("*.log")):
+        st.subheader(f"📝 Log: {log_file.name}")
+        with open(log_file, "r", encoding="utf-8") as f:
+            log_content = f.read()
+        st.code(log_content, language="text")
 
-for log_file in sorted(DATA_LOG_DIR.glob("*.log")):
-    st.subheader(f"📝 Log: {log_file.name}")
-    with open(log_file, "r", encoding="utf-8") as f:
-        log_content = f.read()
-    st.code(log_content, language="text")
+    st.subheader("📁 Arquivos disponíveis na pasta de outputs")
+
+    arquivos = os.listdir(DATA_OUTPUT_DIR)
+    if not arquivos:
+        st.info("Nenhum arquivo encontrado na pasta de outputs.")
+
+for nome_arquivo in sorted(arquivos):
+    caminho_arquivo = os.path.join(DATA_OUTPUT_DIR, nome_arquivo)
+
+    if os.path.isfile(caminho_arquivo):
+        data_criacao = datetime.fromtimestamp(os.path.getctime(caminho_arquivo))
+        data_formatada = data_criacao.strftime("%d/%m/%Y %H:%M:%S")
+
+        st.markdown(f"**{nome_arquivo}** — _criado em {data_formatada}_")
+        with open(caminho_arquivo, "rb") as f:
+            bytes_data = f.read()
+            st.download_button(
+                label=f"Baixar {nome_arquivo}",
+                data=bytes_data,
+                file_name=nome_arquivo,
+                mime="application/octet-stream"
+            )
+        st.divider()
