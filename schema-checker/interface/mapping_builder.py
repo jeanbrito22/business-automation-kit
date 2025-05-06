@@ -16,7 +16,14 @@ def build_excel_mapping_interface(xlsx_dir: Path, schema_dir: Path, mapping_path
         sample_df = xls.parse(sheet_name, nrows=1)
         st.write("Colunas disponíveis:", list(sample_df.columns))
 
-        expand_cols = st.multiselect("Colunas para expand_dates_to (3: Ano, Mes, Valor)", list(sample_df.columns), key=f"expand_{xlsx_file.name}")
+        expand_cols_input = st.text_input(
+            "Digite os nomes das colunas para expand_dates_to (ex: Ano, Mes, Valor)", 
+            value="Ano, Mes, Valor",
+            key=f"expand_{xlsx_file.name}"
+        )
+
+        expand_cols = [col.strip() for col in expand_cols_input.split(",") if col.strip()]
+
 
         # Nome do CSV que será gerado
         output_csv_name = f"tb_file_{xlsx_file.stem.lower().replace(' ', '_')}.csv"
