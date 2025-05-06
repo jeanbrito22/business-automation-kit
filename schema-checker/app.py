@@ -44,16 +44,13 @@ if submit_uploads:
 # Interface de mapeamento para Excel (somente se mapping.json não foi fornecido)
 st.header("2. Configurar mapping para arquivos Excel")
 
-modo_mapping = st.radio(
-    "Como deseja configurar os arquivos Excel?",
-    ["Individual (arquivo a arquivo)", "Agrupado por prefixo"],
-    key="modo_mapping"
-)
+st.subheader("2.1 Mapeamento agrupado por prefixo (ideal para arquivos recorrentes)")
+build_grouped_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
 
-if modo_mapping == "Individual (arquivo a arquivo)":
-    build_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
-else:
-    build_grouped_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
+st.divider()
+
+st.subheader("2.2 Mapeamento individual (arquivo por arquivo)")
+build_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
 
 # Checagem dos CSVs e schemas
 # Verifica CSVs sem schema correspondente

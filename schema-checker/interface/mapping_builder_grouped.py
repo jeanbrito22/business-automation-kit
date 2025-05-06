@@ -1,4 +1,3 @@
-
 import streamlit as st
 import json
 import pandas as pd
@@ -30,8 +29,21 @@ def build_grouped_excel_mapping_interface(xlsx_dir: Path, schema_dir: Path, mapp
     for prefix, arquivos in grupos.items():
         st.subheader(f"Grupo: `{prefix}` ({len(arquivos)} arquivos)")
 
-        sheet_name = st.text_input(
+        # Detecta abas disponíveis entre os arquivos
+        sheet_sugestoes = set()
+        for arq in arquivos:
+            try:
+                xls = pd.ExcelFile(xlsx_dir / arq.name)
+                sheet_sugestoes.update(xls.sheet_names)
+            except Exception:
+                pass
+
+        sheet_sugestoes = sorted(list(sheet_sugestoes)) or ["Plan1"]
+
+        sheet_name = st.selectbox(
             f"Aba comum para os arquivos do grupo `{prefix}`",
+            options=sheet_sugestoes,
+            index=0,
             key=f"sheet_{prefix}"
         )
 
@@ -78,3 +90,4 @@ def build_grouped_excel_mapping_interface(xlsx_dir: Path, schema_dir: Path, mapp
 
         with open(mapping_path, "w", encoding="utf-8") as f:
             json.dump(combined_mapping, f, indent=2, ensure_ascii=False)
+        st.success(f"Mapping agrupado salvo em {mapping_path}")
