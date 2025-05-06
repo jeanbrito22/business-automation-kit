@@ -8,15 +8,5 @@
       "Mes",
       "Valor"
     ]
-  },
-  {
-    "filename": "sample_2.xlsx",
-    "sheet_name": "Base",
-    "output_csv_name": "tb_file_sample_2.csv",
-    "expand_dates_to": [
-      "Ano",
-      "Mes",
-      "Valor"
-    ]
   }
 ]

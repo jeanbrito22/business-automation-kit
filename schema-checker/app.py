@@ -82,20 +82,20 @@ if st.session_state.executado:
     if not arquivos:
         st.info("Nenhum arquivo encontrado na pasta de outputs.")
 
-for nome_arquivo in sorted(arquivos):
-    caminho_arquivo = os.path.join(DATA_OUTPUT_DIR, nome_arquivo)
+    for nome_arquivo in sorted(arquivos):
+        caminho_arquivo = os.path.join(DATA_OUTPUT_DIR, nome_arquivo)
 
-    if os.path.isfile(caminho_arquivo):
-        data_criacao = datetime.fromtimestamp(os.path.getctime(caminho_arquivo))
-        data_formatada = data_criacao.strftime("%d/%m/%Y %H:%M:%S")
+        if os.path.isfile(caminho_arquivo):
+            data_criacao = datetime.fromtimestamp(os.path.getctime(caminho_arquivo))
+            data_formatada = data_criacao.strftime("%d/%m/%Y %H:%M:%S")
 
-        st.markdown(f"**{nome_arquivo}** — _criado em {data_formatada}_")
-        with open(caminho_arquivo, "rb") as f:
-            bytes_data = f.read()
-            st.download_button(
-                label=f"Baixar {nome_arquivo}",
-                data=bytes_data,
-                file_name=nome_arquivo,
-                mime="application/octet-stream"
-            )
-        st.divider()
+            st.markdown(f"**{nome_arquivo}** — _criado em {data_formatada}_")
+            with open(caminho_arquivo, "rb") as f:
+                bytes_data = f.read()
+                st.download_button(
+                    label=f"Baixar {nome_arquivo}",
+                    data=bytes_data,
+                    file_name=nome_arquivo,
+                    mime="application/octet-stream"
+                )
+            st.divider()
