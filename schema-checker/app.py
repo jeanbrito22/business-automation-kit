@@ -60,7 +60,7 @@ elif csvs_fora_do_padrao:
     for fname in csvs_fora_do_padrao:
         st.code(fname)
     st.markdown("➡️ Esperado: arquivos com nome no formato `tb_file_<nome>.csv` para que o schema `file_ingestion_<nome>.json` seja aplicado.")
-    st.markdown("✅ Você pode renomear o arquivo ou gerar um schema correspondente.")
+    st.markdown("✅ Você pode renomear o arquivo.")
 else:
     st.success("Todos os arquivos CSV possuem schema correspondente.")
 
