@@ -1,6 +1,6 @@
 [
   {
-    "filename": "sample.xlsx",
+    "filename": "BI DIREX - Pesados (2).xlsx",
     "sheet_name": "Base",
     "output_csv_name": "tb_file_sample.csv",
     "expand_dates_to": [
