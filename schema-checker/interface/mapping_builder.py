@@ -59,7 +59,14 @@ def build_excel_mapping_interface(xlsx_dir: Path, schema_dir: Path, mapping_path
             "expand_dates_to": expand_cols
         })
 
-    if st.button("Salvar mapping.json"):
+    if st.button("Salvar mapping individual"):
+        try:
+            with open(mapping_path, "r", encoding="utf-8") as f:
+                existing_mapping = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            existing_mapping = []
+
+        combined_mapping = existing_mapping + [m for m in mapping if m not in existing_mapping]
+
         with open(mapping_path, "w", encoding="utf-8") as f:
-            json.dump(mapping, f, indent=2, ensure_ascii=False)
-        st.success(f"Mapping salvo em {mapping_path}")
+            json.dump(combined_mapping, f, indent=2, ensure_ascii=False)

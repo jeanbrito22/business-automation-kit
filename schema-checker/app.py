@@ -4,6 +4,7 @@ from pathlib import Path
 import os, re
 from interface.uploader import handle_uploads
 from interface.mapping_builder import build_excel_mapping_interface
+from interface.mapping_builder_grouped import build_grouped_excel_mapping_interface
 from interface.schema_matcher import check_csv_schema_compatibility, identify_non_standard_csvs
 from interface.runner import run_processing_pipeline
 
@@ -42,7 +43,17 @@ if submit_uploads:
 
 # Interface de mapeamento para Excel (somente se mapping.json não foi fornecido)
 st.header("2. Configurar mapping para arquivos Excel")
-build_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
+
+modo_mapping = st.radio(
+    "Como deseja configurar os arquivos Excel?",
+    ["Individual (arquivo a arquivo)", "Agrupado por prefixo"],
+    key="modo_mapping"
+)
+
+if modo_mapping == "Individual (arquivo a arquivo)":
+    build_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
+else:
+    build_grouped_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
 
 # Checagem dos CSVs e schemas
 # Verifica CSVs sem schema correspondente
