@@ -74,7 +74,7 @@ if st.session_state.executado:
         st.subheader(f"📝 Log: {log_file.name}")
         with open(log_file, "r", encoding="utf-8") as f:
             log_content = f.read()
-        st.code(log_content, language="text")
+        st.code(log_content, language="text", height=300)
 
     st.subheader("📁 Arquivos disponíveis na pasta de outputs")
 

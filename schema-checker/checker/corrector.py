@@ -140,4 +140,4 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
         writer.writeheader()
         writer.writerows(corrected_data)
 
-    print(f"\n💾 Corrected CSV saved to: {output_csv_path}")
+    print(f"\n💾 CSV salvo com sucesso em: {output_csv_path}")

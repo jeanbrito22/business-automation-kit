@@ -16,9 +16,6 @@ def run_processing_pipeline(mode, base_dir: Path, csv_dir, xlsx_dir, schema_dir,
             continue
 
         if mode in ["validar", "executar tudo"]:
-            print(f"schema_path: {schema_file}")
-            print(f"csv_file: {csv_file}")
-            print(f"log_dir: {log_dir}")
             validate_csv_against_schema(schema_path=schema_file, csv_path=csv_file)
 
         if mode in ["corrigir", "executar tudo"]:

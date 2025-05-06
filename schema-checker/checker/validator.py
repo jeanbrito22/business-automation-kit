@@ -57,10 +57,10 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/logs/
 
     for col in csv_columns:
         if col not in expected_columns:
-            errors.append(f"Header error: Unexpected column '{col}' not in schema")
+            errors.append(f"Erro no Cabeçalho: Coluna desconhecida '{col}' não está no schema JSON")
 
     if list(csv_columns) != expected_columns:
-        errors.append("Header error: Column order does not match schema")
+        errors.append("Erro de Cabeçalho: A ordem da coluna não segue o schema JSON")
 
     for i, row in enumerate(csv_data):
         for column in schema:
@@ -75,7 +75,7 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/logs/
                 date_format if expected_type == "date" else None,
                 input_settings["spark_read_args"].get("timestampFormat") if expected_type == "timestamp" else None
             ):
-                errors.append(f"Row {i+2}: Column '{source_col}' expected type '{expected_type}', got '{value}'")
+                errors.append(f"Linha {i+2}: Coluna '{source_col}' tipo esperado '{expected_type}', tipo encontrado '{value}'")
 
     with open(log_path, "a" if append else "w", encoding="utf-8") as log:
         table_name = csv_path.stem.replace("tb_file_", "")
@@ -87,16 +87,15 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/logs/
             missing_in_csv = schema_cols_set - csv_cols_set
             unexpected_in_csv = csv_cols_set - schema_cols_set
             if missing_in_csv:
-                log.write(" - Columns expected in schema but missing in CSV:\n")
+                log.write(" - Colunas esperadas no schema JSON mas faltando no CSV:\n")
                 for col in sorted(missing_in_csv):
                     log.write(f"    · {col}\n")
             if unexpected_in_csv:
-                log.write(" - Columns found in CSV but not in schema:\n")
+                log.write(" - Colunas encontradas no CSV mas não no schema JSON:\n")
                 for col in sorted(unexpected_in_csv):
                     log.write(f"    · {col}\n")
             for err in errors:
                 log.write(f" - {err}\n")
         else:
-            log.write("✅ CSV is valid against schema\n")
+            log.write("✅ O CSV é validado quando comaprado ao Schema\n")
     
-    print(f"\n💾 Validate CSV saved to")
