@@ -1,6 +1,7 @@
+
 # 🧪 CSV Validator & Corrector com JSON Schema
 
-Este projeto valida e corrige arquivos `.csv` com base em esquemas JSON (usando o padrão `file_ingestion_*.json`). Também suporta a conversão de arquivos `.xlsx` para `.csv` com seleção de aba.
+Este projeto valida e corrige arquivos `.csv` com base em esquemas JSON (usando o padrão `file_ingestion_*.json`). Também suporta a conversão de arquivos `.xlsx` para `.csv` com seleção de aba, via terminal ou interface gráfica feita com Streamlit.
 
 ---
 
@@ -19,13 +20,20 @@ Este projeto valida e corrige arquivos `.csv` com base em esquemas JSON (usando 
 │   ├── validator.py
 │   ├── corrector.py
 │   └── xlsx_converter.py
-├── main.py                      # Ponto de entrada principal
-├── data/inputs/xlsx/excel_mapping.json   # Mapeamento de Excel para CSV
+├── interface/
+│   ├── app.py                   # Interface Streamlit
+│   ├── uploader.py              # Upload de arquivos
+│   ├── runner.py                # Execução da pipeline
+│   ├── mapping_builder.py       # Criação do excel_mapping.json
+│   └── schema_matcher.py        # Validação de schemas e abas
+├── main.py                      # Ponto de entrada principal (CLI)
+├── requirements.txt
+└── data/inputs/xlsx/excel_mapping.json   # Mapeamento de Excel para CSV
 ```
 
 ---
 
-## 🚀 Como executar
+## 🚀 Como executar via terminal (CLI)
 
 ### ✅ Modos suportados:
 
@@ -40,19 +48,40 @@ Este projeto valida e corrige arquivos `.csv` com base em esquemas JSON (usando 
 
 ```bash
 python main.py --mode validate
-```
-
-```bash
 python main.py --mode correct
-```
-
-```bash
 python main.py --mode convert
-```
-
-```bash
 python main.py --mode convert_correct
 ```
+
+---
+
+## 🖼️ Interface Gráfica com Streamlit
+
+A interface gráfica permite:
+
+- Upload de múltiplos arquivos `.csv`, `.xlsx` e `excel_mapping.json`
+- Criação visual e interativa do `excel_mapping.json`
+- Execução do processo completo (convert, validate, correct)
+- Visualização dos logs de validação (`.log`)
+- Download direto dos arquivos corrigidos (`outputs/`)
+- Botão "Sobrescrever arquivos" para limpar e reprocessar os dados
+
+### ▶️ Como executar:
+
+```bash
+streamlit run interface/app.py
+```
+
+### 🌐 Acessando:
+
+A interface será aberta automaticamente no navegador padrão. Caso não abra, acesse:  
+[http://localhost:8501](http://localhost:8501)
+
+### ⚠️ Observações:
+
+- Os arquivos de saída só aparecem após clicar no botão **Executar**
+- O botão **Sobrescrever arquivos** limpa os diretórios antes de salvar novos arquivos
+- Os arquivos enviados devem seguir o padrão esperado de colunas (conforme schema)
 
 ---
 
@@ -61,9 +90,14 @@ python main.py --mode convert_correct
 ```json
 [
   {
-    "source": "Planilha (2).xlsx",
-    "sheet": "dados_bi",
-    "target": "tb_file_planilha.csv"
+    "filename": "Planilha (2).xlsx",
+    "sheet_name": "dados_bi",
+    "output_csv_name": "tb_file_planilha.csv",
+    "expand_dates_to": [
+      "Ano",
+      "Mes",
+      "Valor"
+    ]
   }
 ]
 ```
@@ -80,6 +114,7 @@ python main.py --mode convert_correct
 - Corrige formatos de datas, timestamps, inteiros com ponto, valores monetários e espaços
 - Gera relatório de validação unificado em `data/logs/validation_report.log`
 - Converte `.xlsx` com seleção de aba para `.csv`
+- Interface gráfica moderna com Streamlit
 
 ---
 
@@ -87,18 +122,11 @@ python main.py --mode convert_correct
 
 - Python 3.8+
 - pandas
-- openpyxl (para leitura de `.xlsx`)
+- openpyxl
+- streamlit
 
 Instale com:
 
 ```bash
 pip install -r requirements.txt
 ```
-
----
-
-## 📮 Futuro
-
-- Integração com Streamlit para interface gráfica
-- Upload de Excel e escolha de aba via frontend
-- Download dos arquivos corrigidos
