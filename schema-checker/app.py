@@ -4,7 +4,10 @@ from pathlib import Path
 import os, re
 from interface.uploader import handle_uploads
 from interface.mapping_builder import build_excel_mapping_interface
-from interface.mapping_builder_grouped import build_grouped_excel_mapping_interface
+from interface.mapping_builder_grouped import (
+    build_grouped_excel_mapping_interface,
+    separar_grupos_por_tamanho
+)
 from interface.schema_matcher import check_csv_schema_compatibility, identify_non_standard_csvs
 from interface.runner import run_processing_pipeline
 
@@ -42,15 +45,16 @@ if submit_uploads:
     st.success("Arquivos salvos com sucesso!")
 
 # Interface de mapeamento para Excel (somente se mapping.json não foi fornecido)
-st.header("2. Configurar mapping para arquivos Excel")
+
+grupos_agrupados, arquivos_individuais = separar_grupos_por_tamanho(DATA_INPUT_XLSX)
 
 st.subheader("2.1 Mapeamento agrupado por prefixo (ideal para arquivos recorrentes)")
-build_grouped_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
+build_grouped_excel_mapping_interface(grupos_agrupados, SCHEMA_DIR, MAPPING_PATH)
 
 st.divider()
 
 st.subheader("2.2 Mapeamento individual (arquivo por arquivo)")
-build_excel_mapping_interface(DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH)
+build_excel_mapping_interface(arquivos_individuais, SCHEMA_DIR, MAPPING_PATH)
 
 # Checagem dos CSVs e schemas
 # Verifica CSVs sem schema correspondente
