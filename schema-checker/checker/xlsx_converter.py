@@ -31,7 +31,7 @@ def convert_single_excel_to_csv(excel_path: Path, mapping_path: Path, input_dir:
             sep = schema_data["table_spec"][0]["input"]["spark_read_args"].get("sep", ",")
             seps[output_csv_name] = sep
 
-        df = pd.read_excel(excel_path, sheet_name=sheet_name, engine="openpyxl")
+        df = pd.read_excel(excel_path, sheet_name=sheet_name, engine="openpyxl", dtype=str)
 
         if expand_target:
             if len(expand_target) != 3:
