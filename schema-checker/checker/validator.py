@@ -1,9 +1,10 @@
-# checker/validator.py
+
 from utils.file_loader import load_csv, load_schema
 from utils.format_utils import convert_spark_format_to_strptime
 from checker.corrector import clean_value, normalize_integer, normalize_decimal
 from datetime import datetime
 from pathlib import Path
+from collections import Counter
 
 def validate_value_type(value, expected_type, date_format=None, timestamp_format=None):
     value = clean_value(value)
@@ -11,7 +12,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
     if expected_type == "integer":
         value = clean_value(value)
         if "." in value or "," in value:
-            return False  # ponto ou vírgula não são aceitos no formato original
+            return False
         try:
             int(value)
             return True
@@ -53,14 +54,14 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/logs/
     csv_data = load_csv(csv_path, schema_path, delimiter=delimiter)
     expected_columns = [col["source_column"] for col in schema]
     csv_columns = csv_data[0].keys()
-    errors = []
+    error_counter = Counter()
 
     for col in csv_columns:
         if col not in expected_columns:
-            errors.append(f"Erro no Cabeçalho: Coluna desconhecida '{col}' não está no schema JSON")
+            error_counter[f"Coluna desconhecida '{col}' não está no schema JSON"] += 1
 
     if list(csv_columns) != expected_columns:
-        errors.append("Erro de Cabeçalho: A ordem da coluna não segue o schema JSON")
+        error_counter["A ordem da coluna não segue o schema JSON"] += 1
 
     for i, row in enumerate(csv_data):
         for column in schema:
@@ -75,13 +76,14 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/logs/
                 date_format if expected_type == "date" else None,
                 input_settings["spark_read_args"].get("timestampFormat") if expected_type == "timestamp" else None
             ):
-                errors.append(f"Linha {i+2}: Coluna '{source_col}' tipo esperado '{expected_type}', tipo encontrado '{value}'")
+                msg = f"Coluna '{source_col}' tipo esperado '{expected_type}', tipo encontrado '{value}'"
+                error_counter[msg] += 1
 
     with open(log_path, "a" if append else "w", encoding="utf-8") as log:
         table_name = csv_path.stem.replace("tb_file_", "")
         log.write(f"\n\n=== Validação do arquivo: {table_name}.csv ===\n\n")
 
-        if errors:
+        if error_counter:
             csv_cols_set = set(csv_columns)
             schema_cols_set = set(expected_columns)
             missing_in_csv = schema_cols_set - csv_cols_set
@@ -94,8 +96,11 @@ def validate_csv_against_schema(schema_path, csv_path, log_path=Path("data/logs/
                 log.write(" - Colunas encontradas no CSV mas não no schema JSON:\n")
                 for col in sorted(unexpected_in_csv):
                     log.write(f"    · {col}\n")
-            for err in errors:
-                log.write(f" - {err}\n")
+
+            for msg, count in error_counter.items():
+                if count == 1:
+                    log.write(f" - {msg}\n")
+                else:
+                    log.write(f" - {count}x: {msg}\n")
         else:
-            log.write("✅ O CSV é validado quando comaprado ao Schema\n")
-    
+            log.write("✅ O CSV é validado quando comparado ao Schema\n")
