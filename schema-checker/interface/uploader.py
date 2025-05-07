@@ -4,7 +4,7 @@ import shutil
 def handle_uploads(csvs, excels, schemas, csv_dir, xlsx_dir, schema_dir, uploaded_mapping, mapping_path):
     # Apaga e recria todas as subpastas de data/
     base_data_dir = csv_dir.parent.parent  # Caminho: data/
-    for subfolder in ["inputs/csv", "inputs/xlsx", "outputs", "logs"]:
+    for subfolder in ["inputs/csv", "inputs/xlsx", "logs"]:
         full_path = base_data_dir / subfolder
         if full_path.exists():
             shutil.rmtree(full_path)
