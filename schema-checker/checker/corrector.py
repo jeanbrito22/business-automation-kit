@@ -121,15 +121,20 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
             elif expected_type == "integer":
                 corrected_row[source_col] = normalize_integer(value)
             elif expected_type == "date":
-                if validate_value_type(value, "date", date_format):
-                    corrected_row[source_col] = value
-                else:
+                try:
+                    fmt = convert_spark_format_to_strptime(input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y"))
+                    parsed = datetime.strptime(value, fmt)
+                    corrected_row[source_col] = parsed.strftime(fmt)
+                except:
                     corrected_row[source_col] = ""
             elif expected_type == "timestamp":
-                if validate_value_type(value, "timestamp", timestamp_format):
-                    corrected_row[source_col] = normalize_timestamp(value)
-                else:
-                    corrected_row[source_col] = f"{value.strip()} 00:00:00" if value.strip() else ""
+                try:
+                    fmt = convert_spark_format_to_strptime(input_settings["spark_read_args"].get("timestampFormat", "%d/%m/%Y %H:%M:%S"))
+                    normalized = normalize_timestamp(value, fmt)
+                    parsed = datetime.strptime(normalized, fmt)
+                    corrected_row[source_col] = parsed.strftime(fmt)
+                except:
+                    corrected_row[source_col] = ""
             else:
                 corrected_row[source_col] = value
 
