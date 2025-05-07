@@ -1,7 +1,9 @@
+
 # checker/corrector.py
 import csv
 import re
 from datetime import datetime
+from dateutil.parser import parse
 from utils.file_loader import load_csv, load_schema
 from utils.format_utils import convert_spark_format_to_strptime
 
@@ -102,8 +104,10 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
     schema = table_spec["schema"]
     input_settings = table_spec["input"]
     delimiter = input_settings["spark_read_args"].get("sep", ",")
-    date_format = convert_spark_format_to_strptime(input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y"))
-    timestamp_format = convert_spark_format_to_strptime(input_settings["spark_read_args"].get("timestampFormat", "%d/%m/%Y %H:%M:%S"))
+    date_format_str = input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y")
+    timestamp_format_str = input_settings["spark_read_args"].get("timestampFormat", "%d/%m/%Y %H:%M:%S")
+    date_format = convert_spark_format_to_strptime(date_format_str)
+    timestamp_format = convert_spark_format_to_strptime(timestamp_format_str)
 
     csv_data = load_csv(input_csv_path, schema_path, delimiter=delimiter)
     expected_columns = [col["source_column"] for col in schema]
@@ -122,17 +126,15 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
                 corrected_row[source_col] = normalize_integer(value)
             elif expected_type == "date":
                 try:
-                    fmt = convert_spark_format_to_strptime(input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y"))
-                    parsed = datetime.strptime(value, fmt)
-                    corrected_row[source_col] = parsed.strftime(fmt)
+                    parsed = parse(value, dayfirst=True)
+                    corrected_row[source_col] = parsed.strftime(date_format)
                 except:
                     corrected_row[source_col] = ""
             elif expected_type == "timestamp":
                 try:
-                    fmt = convert_spark_format_to_strptime(input_settings["spark_read_args"].get("timestampFormat", "%d/%m/%Y %H:%M:%S"))
-                    normalized = normalize_timestamp(value, fmt)
-                    parsed = datetime.strptime(normalized, fmt)
-                    corrected_row[source_col] = parsed.strftime(fmt)
+                    normalized = normalize_timestamp(value, timestamp_format)
+                    parsed = parse(normalized, dayfirst=True)
+                    corrected_row[source_col] = parsed.strftime(timestamp_format)
                 except:
                     corrected_row[source_col] = ""
             else:
