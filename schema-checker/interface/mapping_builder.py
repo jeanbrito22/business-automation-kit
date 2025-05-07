@@ -30,13 +30,22 @@ def build_excel_mapping_interface(arquivos_individuais: list, schema_dir: Path, 
         sample_df = xls.parse(sheet_name, nrows=1)
         st.write("Colunas disponíveis:", list(sample_df.columns))
 
-        expand_cols_input = st.text_input(
-            "Digite os nomes das colunas para expand_dates_to (ex: Ano, Mes, Valor)", 
-            value="Ano, Mes, Valor",
-            key=f"expand_{xlsx_file.name}"
+        expand_cols = []
+        usar_expand = st.radio(
+            f"Pivotar colunas para `{xlsx_file.name}`?",
+            ["Não", "Sim"],
+            key=f"expand_{xlsx_file.name}",
+            horizontal=True
         )
 
-        expand_cols = [col.strip() for col in expand_cols_input.split(",") if col.strip()]
+        if usar_expand == "Sim":
+            expand_cols_input = st.text_input(
+                "Digite os nomes das colunas para expand_dates_to (ex: Ano, Mes, Valor)", 
+                value="Ano, Mes, Valor",
+                key=f"expand_{xlsx_file.name}"
+            )
+
+            expand_cols = [col.strip() for col in expand_cols_input.split(",") if col.strip()]
 
         schema_escolhido = st.selectbox(
             f"Schema para {xlsx_file.name}",
