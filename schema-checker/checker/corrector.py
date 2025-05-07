@@ -1,113 +1,76 @@
 
-# checker/corrector.py
 import csv
 import re
 from datetime import datetime
 from dateutil.parser import parse
+
 from utils.file_loader import load_csv, load_schema
 from utils.format_utils import convert_spark_format_to_strptime
 
-def clean_value(value):
-    if value is None:
-        return ""
-    value = value.strip()
-    value = " ".join(value.split())
-    if value == "-":
-        return ""
-    return value
 
-def normalize_timestamp(value, timestamp_format="%d/%m/%Y %H:%M:%S"):
+def clean_value(value):
     if not value:
         return ""
+    value = str(value).strip()
+    value = " ".join(value.split())
+    return "" if value == "-" else value
 
-    value = clean_value(value)
-
-    try:
-        # Se já está no formato completo, retorna como está
-        datetime.strptime(value, timestamp_format)
-        return value
-    except:
-        pass
-
-    # Casos parciais → completa com 0s
-    try:
-        if re.fullmatch(r"\d{2}/\d{2}/\d{4}", value):
-            return f"{value} 00:00:00"
-        if re.fullmatch(r"\d{2}/\d{2}/\d{4} \d{2}", value):
-            return f"{value}:00:00"
-        if re.fullmatch(r"\d{2}/\d{2}/\d{4} \d{2}:\d{2}", value):
-            return f"{value}:00"
-    except:
-        pass
-
-    return ""
-
-def normalize_decimal(value):
-    if value is None:
-        return ""
-    value = clean_value(value)
-    value = value.replace("R$", "").replace(" ", "")
-
-    if "," in value:
-        value = value.replace(".", "").replace(",", ".")
-
-    if re.fullmatch(r"-?\d+(\.\d+)?", value):
-        return value
-    return ""
 
 def normalize_integer(value):
-    if value is None:
-        return ""
+    value = clean_value(value).replace(" ", "").replace(".", "").replace(",", "")
+    return value if value.isdigit() else ""
+
+
+def normalize_decimal(value):
+    value = clean_value(value).replace("R$", "").replace(" ", "")
+    if "," in value:
+        value = value.replace(".", "").replace(",", ".")
+    return value if re.fullmatch(r"-?\d+(\.\d+)?", value) else ""
+
+
+def normalize_timestamp(value, timestamp_format="%d/%m/%Y %H:%M:%S"):
     value = clean_value(value)
-    value = value.replace(" ", "").replace(".", "").replace(",", "")
-
-    if not value.isdigit():
+    if not value:
+        return ""
+    try:
+        return parse(value, dayfirst=True).strftime(timestamp_format)
+    except:
         return ""
 
-    return value
 
 def validate_value_type(value, expected_type, date_format=None, timestamp_format=None):
-    if expected_type == "integer":
-        try:
+    try:
+        if expected_type == "integer":
             int(normalize_integer(value))
-            return True
-        except:
-            return False
-    elif expected_type in ("decimal", "float"):
-        try:
+        elif expected_type in ("decimal", "float"):
             float(normalize_decimal(value))
-            return True
-        except:
-            return False
-    elif expected_type == "string":
-        return isinstance(value, str)
-    elif expected_type == "date":
-        try:
+        elif expected_type == "string":
+            return isinstance(value, str)
+        elif expected_type == "date":
             fmt = convert_spark_format_to_strptime(date_format or "%d/%m/%Y")
-            parsed = datetime.strptime(value, fmt)
-            return parsed.strftime(fmt) == value
-        except:
-            return False
-    elif expected_type == "timestamp":
-        try:
+            return datetime.strptime(value, fmt).strftime(fmt) == value
+        elif expected_type == "timestamp":
             fmt = convert_spark_format_to_strptime(timestamp_format or "%d/%m/%Y %H:%M:%S")
-            value = normalize_timestamp(value, fmt)
-            parsed = datetime.strptime(value, fmt)
-            return True
-        except:
+            normalized = normalize_timestamp(value, fmt)
+            datetime.strptime(normalized, fmt)
+        else:
             return False
-    return False
+        return True
+    except:
+        return False
+
 
 def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
     schema_data = load_schema(schema_path)
     table_spec = schema_data["table_spec"][0]
     schema = table_spec["schema"]
     input_settings = table_spec["input"]
+
     delimiter = input_settings["spark_read_args"].get("sep", ",")
-    date_format_str = input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y")
-    timestamp_format_str = input_settings["spark_read_args"].get("timestampFormat", "%d/%m/%Y %H:%M:%S")
-    date_format = convert_spark_format_to_strptime(date_format_str)
-    timestamp_format = convert_spark_format_to_strptime(timestamp_format_str)
+    date_fmt_str = input_settings["spark_read_args"].get("dateFormat", "%d/%m/%Y")
+    ts_fmt_str = input_settings["spark_read_args"].get("timestampFormat", "%d/%m/%Y %H:%M:%S")
+    date_fmt = convert_spark_format_to_strptime(date_fmt_str)
+    ts_fmt = convert_spark_format_to_strptime(ts_fmt_str)
 
     csv_data = load_csv(input_csv_path, schema_path, delimiter=delimiter)
     expected_columns = [col["source_column"] for col in schema]
@@ -116,34 +79,31 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
     for row in csv_data:
         corrected_row = {}
         for column in schema:
-            source_col = column["source_column"]
-            expected_type = column["type"]
-            value = clean_value(row.get(source_col, ""))
+            source = column["source_column"]
+            tipo = column["type"]
+            valor = clean_value(row.get(source, ""))
 
-            if expected_type in ("float", "decimal"):
-                corrected_row[source_col] = normalize_decimal(value)
-            elif expected_type == "integer":
-                corrected_row[source_col] = normalize_integer(value)
-            elif expected_type == "date":
+            if tipo in ("decimal", "float"):
+                corrected_row[source] = normalize_decimal(valor)
+            elif tipo == "integer":
+                corrected_row[source] = normalize_integer(valor)
+            elif tipo == "date":
                 try:
-                    parsed = parse(value, dayfirst=True)
-                    corrected_row[source_col] = parsed.strftime(date_format)
+                    corrected_row[source] = parse(valor, dayfirst=True).strftime(date_fmt)
                 except:
-                    corrected_row[source_col] = ""
-            elif expected_type == "timestamp":
+                    corrected_row[source] = ""
+            elif tipo == "timestamp":
                 try:
-                    normalized = normalize_timestamp(value, timestamp_format)
-                    parsed = parse(normalized, dayfirst=True)
-                    corrected_row[source_col] = parsed.strftime(timestamp_format)
+                    corrected_row[source] = parse(normalize_timestamp(valor, ts_fmt), dayfirst=True).strftime(ts_fmt)
                 except:
-                    corrected_row[source_col] = ""
+                    corrected_row[source] = ""
             else:
-                corrected_row[source_col] = value
+                corrected_row[source] = valor
 
         corrected_data.append(corrected_row)
 
-    with open(output_csv_path, "w", newline='', encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=expected_columns, delimiter=';')
+    with open(output_csv_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=expected_columns, delimiter=";")
         writer.writeheader()
         writer.writerows(corrected_data)
 
