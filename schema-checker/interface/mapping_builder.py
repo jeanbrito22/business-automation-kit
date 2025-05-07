@@ -42,7 +42,7 @@ def build_excel_mapping_interface(arquivos_individuais: list, schema_dir: Path, 
             expand_cols_input = st.text_input(
                 "Digite os nomes das colunas para expand_dates_to (ex: Ano, Mes, Valor)", 
                 value="Ano, Mes, Valor",
-                key=f"expand_{xlsx_file.name}"
+                key=f"expand_input_{xlsx_file.name}"
             )
 
             expand_cols = [col.strip() for col in expand_cols_input.split(",") if col.strip()]
