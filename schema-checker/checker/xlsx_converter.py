@@ -61,7 +61,13 @@ def convert_single_excel_to_csv(excel_path: Path, mapping_path: Path, input_dir:
         final_df = pd.concat(dfs, ignore_index=True)
         output_csv = output_dir / output_csv_name
         sep = seps.get(output_csv_name, ",")
-        final_df.to_csv(output_csv, sep=sep, index=False, encoding="utf-8-sig")
+        final_df.to_csv(
+            output_csv, sep=sep,
+            index=False,
+            encoding="utf-8-sig",
+            mode='a',
+            header=not output_csv.exists()
+        )
         print(f"✅ Gerado: {output_csv}")
 
 def convert_excels_to_csv(mapping_path: Path, input_dir: Path, output_dir: Path):
