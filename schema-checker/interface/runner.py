@@ -12,6 +12,9 @@ def run_processing_pipeline(mode, base_dir: Path, csv_dir, xlsx_dir, schema_dir,
             st.write("Finalizando...")
             status.update(label="✅ Processamento concluído!", state="complete")
 
+    log_path = log_dir / "validation_report.log"
+    append_flag = False
+
     for csv_file in csv_dir.glob("tb_file_*.csv"):
         table_name = csv_file.stem.replace("tb_file_", "")
         schema_file = schema_dir / f"file_ingestion_{table_name}.json"
@@ -21,7 +24,13 @@ def run_processing_pipeline(mode, base_dir: Path, csv_dir, xlsx_dir, schema_dir,
             continue
 
         if mode in ["validar", "executar tudo"]:
-            validate_csv_against_schema(schema_path=schema_file, csv_path=csv_file)
+            validate_csv_against_schema(
+                schema_path=schema_file,
+                csv_path=csv_file,
+                log_path=log_path,
+                append=append_flag
+            )
+            append_flag = True
 
         if mode in ["corrigir", "executar tudo"]:
             generate_corrected_csv(schema_file, csv_file, output_file)
