@@ -36,8 +36,17 @@ for prefix in prefixes:
                     particoes[particao].append(obj)
 
     # Processar cada particao
-    for particao, arquivos in particoes.items():
-        tamanhos = [wr.s3.size_objects(arquivo) for arquivo in arquivos]
+    for i, (particao, arquivos) in enumerate(particoes.items()):
+        if i >=3:
+            break
+        arquivos = arquivos[:5]
+        try:
+            descricoes = wr.s3.describe_objects(arquivos)
+            tamanhos = [obj["Size"] for obj in descricoes]
+        except Exception as e:
+            print(f"Erro ao descrever objetos em {prefix} - {particao}: {e}")
+            tamanhos = []
+
         total_bytes = sum(tamanhos)
         status_info = classificar_particao(len(tamanhos), total_bytes, tamanhos)
         resultados.append({
