@@ -15,11 +15,6 @@ if os.path.exists(DESTINO_JSON):
     print(f"Catálogo já existe em {DESTINO_JSON}, não será recriado.")
     exit()
 
-# Forçar sessão boto3 com região correta
-import boto3
-os.environ["AWS_DEFAULT_REGION"] = os.getenv("AWS_DEFAULT_REGION", "sa-east-1")
-boto3.setup_default_session(region_name=os.environ["AWS_DEFAULT_REGION"])
-
 # Obter nomes das tabelas
 print(f"Buscando tabelas do Glue no banco '{DATABASE}'...")
 tabelas = wr.catalog.get_tables(database=DATABASE)
