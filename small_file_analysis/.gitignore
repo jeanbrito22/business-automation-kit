@@ -1,0 +1,4 @@
+.old/
+venv/
+temp.py
+.env
