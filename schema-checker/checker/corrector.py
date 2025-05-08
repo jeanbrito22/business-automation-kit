@@ -33,9 +33,14 @@ def normalize_timestamp(value, timestamp_format="%d/%m/%Y %H:%M:%S"):
     if not value:
         return ""
     try:
-        return parse(value, dayfirst=True).strftime(timestamp_format)
+        # tenta respeitar o formato do schema
+        parsed = datetime.strptime(value, timestamp_format)
     except:
-        return ""
+        try:
+            parsed = parse(value, yearfirst=True)
+        except:
+            return ""
+    return parsed.strftime(timestamp_format)
 
 
 def validate_value_type(value, expected_type, date_format=None, timestamp_format=None):
@@ -48,7 +53,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
             return isinstance(value, str)
         elif expected_type == "date":
             fmt = convert_spark_format_to_strptime(date_format or "%d/%m/%Y")
-            return datetime.strptime(value, fmt).strftime(fmt) == value
+            datetime.strptime(value, fmt)
         elif expected_type == "timestamp":
             fmt = convert_spark_format_to_strptime(timestamp_format or "%d/%m/%Y %H:%M:%S")
             normalized = normalize_timestamp(value, fmt)
@@ -89,14 +94,23 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
                 corrected_row[source] = normalize_integer(valor)
             elif tipo == "date":
                 try:
-                    corrected_row[source] = parse(valor, dayfirst=True).strftime(date_fmt)
+                    parsed = datetime.strptime(valor, date_fmt)
                 except:
-                    corrected_row[source] = ""
+                    try:
+                        parsed = parse(valor, yearfirst=True)
+                    except:
+                        parsed = None
+                corrected_row[source] = parsed.strftime(date_fmt) if parsed else ""
             elif tipo == "timestamp":
+                normalized = normalize_timestamp(valor, ts_fmt)
                 try:
-                    corrected_row[source] = parse(normalize_timestamp(valor, ts_fmt), dayfirst=True).strftime(ts_fmt)
+                    parsed = datetime.strptime(normalized, ts_fmt)
                 except:
-                    corrected_row[source] = ""
+                    try:
+                        parsed = parse(normalized, yearfirst=True)
+                    except:
+                        parsed = None
+                corrected_row[source] = parsed.strftime(ts_fmt) if parsed else ""
             else:
                 corrected_row[source] = valor
 
