@@ -77,8 +77,9 @@ else:
     st.success("Todos os arquivos CSV possuem schema correspondente.")
 
 # Ações possíveis
-st.header("4. Ações")
-mode = st.selectbox("Escolha a ação:", ["validar", "corrigir", "converter", "executar tudo"])
+st.header("4. Execução completa da pipeline")
+st.markdown("Clique no botão abaixo para converter os Excels, validar os CSVs e aplicar correções.")
+mode = "executar tudo"
 
 # Define o estado inicial se ainda não estiver definido
 if "executado" not in st.session_state:
