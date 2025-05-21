@@ -12,13 +12,7 @@ def validate_value_type(value, expected_type, date_format=None, timestamp_format
     value = clean_value(value)
 
     if expected_type == "integer":
-        if "." in value or "," in value:
-            return False
-        try:
-            int(value)
-            return True
-        except:
-            return False
+        return normalize_integer(value) != ""
 
     if expected_type in ("float", "decimal"):
         try:
