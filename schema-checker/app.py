@@ -29,7 +29,7 @@ MAPPING_PATH = DATA_INPUT_XLSX / "excel_mapping.json"
 
 
 # Garante estrutura mínima
-for d in [DATA_INPUT_CSV, DATA_INPUT_XLSX, DATA_OUTPUT_DIR, DATA_LOG_DIR]:
+for d in [SCHEMA_DIR, DATA_INPUT_CSV, DATA_INPUT_XLSX, DATA_OUTPUT_DIR, DATA_LOG_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 st.header("1. Upload dos arquivos")
