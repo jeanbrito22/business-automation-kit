@@ -85,7 +85,7 @@ mode = "executar tudo"
 if "executado" not in st.session_state:
     st.session_state.executado = False
 
-if st.button("🚀 Executar"):
+if st.button("🚀 Executar Transformações"):
     st.session_state.executado = True
     run_processing_pipeline(mode, BASE_DIR, DATA_INPUT_CSV, DATA_INPUT_XLSX, SCHEMA_DIR, MAPPING_PATH, DATA_OUTPUT_DIR, DATA_LOG_DIR)
     st.success("Processamento finalizado! Verifique os outputs e logs.")
