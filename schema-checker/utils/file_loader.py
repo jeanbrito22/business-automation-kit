@@ -11,9 +11,11 @@ def load_csv(path, schema_path=None, delimiter=","):
     expected_fields = [col["source_column"] for col in load_schema(schema_path)["table_spec"][0]["schema"]] if schema_path else []
 
     def normalize_header(h):
-        cleaned = " ".join(h.strip().split()).replace("°", "º").replace("˚", "º")
+        h = h.strip().strip('"')  # remove espaços e aspas duplas do início/fim
+        cleaned = " ".join(h.split()).replace("°", "º").replace("˚", "º")
         return cleaned if cleaned not in expected_fields else next(
             (s for s in expected_fields if unidecode(s) == unidecode(cleaned)), cleaned)
+
 
     with open(path, newline='', encoding='utf-8-sig') as f:
         reader = csv.reader(f, delimiter=delimiter, quoting=csv.QUOTE_MINIMAL)
