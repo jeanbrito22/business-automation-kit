@@ -16,7 +16,7 @@ def load_csv(path, schema_path=None, delimiter=","):
             (s for s in expected_fields if unidecode(s) == unidecode(cleaned)), cleaned)
 
     with open(path, newline='', encoding='utf-8-sig') as f:
-        reader = csv.reader(f, delimiter=delimiter)
+        reader = csv.reader(f, delimiter=delimite, quoting=csv.QUOTE_MINIMAL)
         rows = list(reader)
 
     if not rows:
