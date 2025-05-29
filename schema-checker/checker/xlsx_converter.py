@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 from datetime import datetime
 from collections import defaultdict
+import csv
 
 # inclusao para acompanhamento de progresso na interface
 def convert_single_excel_to_csv(excel_path: Path, mapping_path: Path, input_dir: Path, output_dir: Path):
@@ -67,7 +68,8 @@ def convert_single_excel_to_csv(excel_path: Path, mapping_path: Path, input_dir:
             index=False,
             encoding="utf-8-sig",
             mode='a',
-            header=not output_csv.exists()
+            header=not output_csv.exists(),
+            quoting=csv.QUOTE_ALL
         )
         print(f"✅ Gerado: {output_csv}")
 

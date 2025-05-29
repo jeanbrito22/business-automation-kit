@@ -137,7 +137,7 @@ def generate_corrected_csv(schema_path, input_csv_path, output_csv_path):
         corrected_data.append(corrected_row)
 
     with open(output_csv_path, "w", newline='', encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=expected_columns, delimiter=';')
+        writer = csv.DictWriter(f, fieldnames=expected_columns, delimiter=';', quoting=csv.QUOTE_ALL)
         writer.writeheader()
         writer.writerows(corrected_data)
 
