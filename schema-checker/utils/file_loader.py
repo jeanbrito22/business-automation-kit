@@ -1,5 +1,12 @@
 import csv
 from unidecode import unidecode
+import json
+
+
+def load_schema(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
 
 def load_csv(path, schema_path=None, delimiter=","):
     expected_fields = [
